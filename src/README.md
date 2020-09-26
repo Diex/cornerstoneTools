@@ -35,10 +35,10 @@ Hace otras cosas, al momento esa es la que pude ver, pero creo esta herramienta 
 
 BaseTool y BaseAnnotationTool
 
-- renderToolData(evt): esta funcion se encarga de dibujar el contenido en el canvas.
+- **renderToolData(evt)**: esta funcion se encarga de dibujar el contenido en el canvas.
 
-- createNewMeasurement(eventData): esta funcion se utiliza para configurar las medidas, es decir cada vez que se agrega una medida, esta funcion es ejecutada para setear la data en el STATE de la app, y para que renderToolData la reciba en el objeto "evt"
+- **createNewMeasurement(eventData)**: esta funcion se utiliza para configurar las medidas, es decir cada vez que se agrega una medida, esta funcion es ejecutada para setear la data en el STATE de la app, y para que renderToolData la reciba en el objeto "evt"
 
-- updateCachedStats(image, element, data): si no me equivoco, esta es para actualizar la data creaada en createNewMeasurement cuando algo se modifica.
+- **updateCachedStats(image, element, data)**: si no me equivoco, esta es para actualizar la data creaada en createNewMeasurement cuando algo se modifica.
 
-- pointNearTool(element, data, coords, interactionType): esta funcion es para devolver true/false indicando si el mouse está sobre alguna de las lineas o handles.
+- **pointNearTool(element, data, coords, interactionType)**: esta funcion es para devolver true/false indicando si el mouse está sobre alguna de las lineas o handles.

@@ -1,25 +1,27 @@
-import BaseTool from './base/BaseTool.js';
-import BaseAnnotationTool from './base/BaseAnnotationTool.js';
+import BaseAnnotationTool from './../base/BaseAnnotationTool.js';
 // State
-import { getToolState } from './../stateManagement/toolState.js';
-import toolStyle from './../stateManagement/toolStyle.js';
-import toolColors from './../stateManagement/toolColors.js';
+import { getToolState } from './../../stateManagement/toolState.js';
+import toolStyle from './../../stateManagement/toolStyle.js';
+import toolColors from './../../stateManagement/toolColors.js';
 // Drawing
 import {
   getNewContext,
   draw,
   setShadow,
   drawLine,
-} from './../drawing/index.js';
-import drawLinkedTextBox from './../drawing/drawLinkedTextBox.js';
-import drawHandles from './../drawing/drawHandles.js';
-import lineSegDistance from './../util/lineSegDistance.js';
-import { lengthCursor } from './cursors/index.js';
-import { getLogger } from '../util/logger.js';
-import getPixelSpacing from '../util/getPixelSpacing';
-import throttle from '../util/throttle';
-import { getModule } from '../store/index';
-import external from './../externalModules.js';
+} from './../../drawing/index.js';
+import drawLinkedTextBox from './../../drawing/drawLinkedTextBox.js';
+import drawHandles from './../../drawing/drawHandles.js';
+import lineSegDistance from './../../util/lineSegDistance.js';
+import { lengthCursor } from './../cursors/index.js';
+import { getLogger } from '../../util/logger.js';
+import getPixelSpacing from '../../util/getPixelSpacing';
+import throttle from '../../util/throttle';
+import { getModule } from '../../store/index';
+import external from './../../externalModules.js';
+
+// Custom functionality
+import addNewMeasurement from './chestWallTool/addNewMeasurement';
 
 const logger = getLogger('tools:annotation:ChestWallTool');
 
@@ -46,6 +48,10 @@ export default class ChestWallTool extends BaseAnnotationTool {
 
     super(props, defaultProps);
 
+    this.addNewMeasurement = addNewMeasurement.bind(this);
+    // this.createNewMeasurement = this._createNewMeasurement.bind(this);
+    // console.log('ChestWallTool.addNewMeasurement', addNewMeasurement);
+    // console.log('this.addNewMeasurement', this.addNewMeasurement);
     // Mode Callbacks: (element, options)
     // this.activeCallback = this._initializeCanvasTool.bind(this);
     // this.enabledCallback = this._createMagnificationCanvas.bind(this);
@@ -77,13 +83,11 @@ export default class ChestWallTool extends BaseAnnotationTool {
   // }
 
   renderToolData(evt) {
-    console.log('ChestWallTool: renderToolData');
+    console.log('ChestWallTool: renderToolData(evt)', evt);
     const eventData = evt.detail;
     const element = evt.detail.element;
 
     const toolData = getToolState(evt.currentTarget, this.name);
-
-    console.log('toolData', toolData);
 
     const canvas = element.querySelector('canvas.cornerstone-canvas');
     const context = getNewContext(canvas);
@@ -101,11 +105,12 @@ export default class ChestWallTool extends BaseAnnotationTool {
 
         const handleOptions = {
           color: 'blue',
-          handleRadius: 20,
+          handleRadius: 5,
           drawHandlesIfActive: this.configuration.drawHandlesOnHover,
           hideHandlesIfMoving: this.configuration.hideHandlesIfMoving,
         };
 
+        //  Render Blue Handles
         if (this.configuration.drawHandles) {
           drawHandles(context, eventData, data.handles, handleOptions);
         }
@@ -121,25 +126,45 @@ export default class ChestWallTool extends BaseAnnotationTool {
           data.handles.blueLeft,
           data.handles.blueRight,
           lineOptions
-          // 'canvas'
         );
 
-        // drawLine(
-        //   ctx,
-        //   element,
-        //   data.handles.blueCenterTop,
-        //   data.handles.blueCenterBottom,
-        //   lineOptions
-        //   // 'canvas'
-        // );
-      }
+        drawLine(
+          ctx,
+          element,
+          data.handles.blueCenterTop,
+          data.handles.blueCenterBottom,
+          lineOptions
+        );
 
-      // external.cornerstone.updateImage(evt.detail.element);
+        //  Render Red Handles
+        handleOptions.color = 'red';
+        lineOptions.color = 'red';
+
+        drawLine(
+          ctx,
+          element,
+          data.handles.redTopLeft,
+          data.handles.redTopRight,
+          lineOptions
+        );
+
+        drawLine(
+          ctx,
+          element,
+          data.handles.redBottomLeft,
+          data.handles.redBottomRight,
+          lineOptions
+        );
+      }
     });
   }
 
-  createNewMeasurement(eventData) {
-    console.log('ChestWallTool: createNewMeasurement', eventData);
+  createNewMeasurement(evt) {
+    const eventData = evt.detail;
+    const element = eventData.element;
+
+    console.log('ChestWallTool: createNewMeasurement(eventData)', eventData);
+
     const goodEventData =
       eventData && eventData.currentPoints && eventData.currentPoints.image;
 
@@ -151,11 +176,15 @@ export default class ChestWallTool extends BaseAnnotationTool {
       return;
     }
 
-    console.log('eventData', eventData);
-    const element = eventData.element;
+    const toolData = getToolState(evt.currentTarget, this.name);
 
-    // // const toolData = getToolState(evt.currentTarget, this.name);
-    // console.log('element', element);
+    console.log('createNewMeasurement.toolData', toolData);
+    // This avoid to create multiple tool handlers at the same time
+    if (toolData && toolData.data && toolData.data.length) {
+      return;
+    }
+
+    const { x, y } = eventData.currentPoints.image;
 
     const canvas = element.querySelector('canvas.cornerstone-canvas');
     const context = getNewContext(canvas);
@@ -163,19 +192,26 @@ export default class ChestWallTool extends BaseAnnotationTool {
     const width = canvas.width;
     const height = canvas.height;
 
-    // const startCanvas = external.cornerstone.pixelToCanvas(element, {
-    //   x: Math.floor(width * 0.2),
-    //   y: Math.floor(height * 0.8),
-    // });
-    //
-    // const endCanvas = external.cornerstone.pixelToCanvas(element, {
-    //   x: Math.floor(width * 0.8),
-    //   y: Math.floor(height * 0.8),
-    // });
+    const getHandle = (x, y, index, extraAttributes = {}) =>
+      Object.assign(
+        {
+          x,
+          y,
+          index,
+          drawnIndependently: false,
+          allowedOutsideImage: false,
+          highlight: true,
+          active: false,
+        },
+        extraAttributes
+      );
 
-    // console.log('ChestWallTool: createNewMeasurement MESSRE');
-    // console.log(startCanvas);
-    // console.log(endCanvas);
+    const handleDistance = 100;
+    const topRedhandleDistanceX = handleDistance * 0.6;
+    const topRedHandleDistanceY = handleDistance * 0.66;
+
+    const bottomRedhandleDistanceX = handleDistance * 0.8;
+    const bottomRedhandleDistanceY = handleDistance * 0.33;
 
     return {
       visible: true,
@@ -183,78 +219,31 @@ export default class ChestWallTool extends BaseAnnotationTool {
       color: undefined,
       invalidated: true,
       handles: {
-        blueLeft: {
-          // x: Math.floor(width * 0.2),
-          // y: Math.floor(height * 0.8),
-          // ...startCanvas,
-          x: 100,
-          y: 100,
-          highlight: true,
-          active: false,
-          radius: 20,
-        },
-        blueRight: {
-          // x: Math.floor(width * 0.8),
-          // y: Math.floor(height * 0.8),
-          // ...endCanvas,
-          x: 200,
-          y: 200,
-          highlight: true,
-          active: false,
-          radius: 20,
-        },
-        // blueCenterTop: {
-        //   x: Math.floor(width / 2),
-        //   y: Math.floor(height * 0.2),
-        //   highlight: true,
-        //   active: false,
-        //   radius: 20,
-        // },
-        // blueCenterBottom: {
-        //   x: Math.floor(width / 2),
-        //   y: Math.floor(height * 0.8),
-        //   highlight: true,
-        //   active: false,
-        //   radius: 20,
-        // },
-        // },
-        // {
-        //   blueHandleTop: {
-        //     x,
-        //     y,
-        //     highlight: true,
-        //     active: false,
-        //   },
-        //   blueHandleCenter: {
-        //     x,
-        //     y,
-        //     highlight: true,
-        //     active: false,
-        //   },
-        //   blueHandleLeft: {
-        //     x,
-        //     y,
-        //     highlight: true,
-        //     active: false,
-        //   },
-        //   blueHandleRight: {
-        //     x,
-        //     y,
-        //     highlight: true,
-        //     active: false,
-        //   },
-        // start: {
-        //   x,
-        //   y,
-        //   highlight: true,
-        //   active: false,
-        // },
-        // end: {
-        //   x,
-        //   y,
-        //   highlight: true,
-        //   active: true,
-        // },
+        // Blue Handles
+        blueCenterBottom: getHandle(x, y),
+        blueLeft: getHandle(x - handleDistance, y),
+        blueRight: getHandle(x + handleDistance, y),
+        blueCenterTop: getHandle(x, y - handleDistance),
+
+        // Red Handles
+        redTopCenter: getHandle(x, y - topRedHandleDistanceY),
+        redTopLeft: getHandle(
+          x - topRedhandleDistanceX,
+          y - topRedHandleDistanceY
+        ),
+        redTopRight: getHandle(
+          x + topRedhandleDistanceX,
+          y - topRedHandleDistanceY
+        ),
+        redBottomCenter: getHandle(x, y - bottomRedhandleDistanceY),
+        redBottomLeft: getHandle(
+          x - bottomRedhandleDistanceX,
+          y - bottomRedhandleDistanceY
+        ),
+        redBottomRight: getHandle(
+          x + bottomRedhandleDistanceX,
+          y - bottomRedhandleDistanceY
+        ),
         // textBox: {
         //   active: false,
         //   hasMoved: false,
@@ -267,13 +256,16 @@ export default class ChestWallTool extends BaseAnnotationTool {
     };
   }
 
+  // NOTE:: createNewMeasurement is customized to receive event objet instead eventData
+  // because we need to skip the creation of a new measurement if there's an existing one
+
   updateCachedStats(image, element, data) {
     console.log('ChestWallTool: updateCachedStats');
     const { rowPixelSpacing, colPixelSpacing } = getPixelSpacing(image);
 
-    console.log(image);
-    console.log(element);
-    console.log(data);
+    // console.log(image);
+    // console.log(element);
+    // console.log(data);
     // Set rowPixelSpacing and columnPixelSpacing to 1 if they are undefined (or zero)
     // const dx =
     //   (data.handles.end.x - data.handles.start.x) * (colPixelSpacing || 1);

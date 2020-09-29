@@ -79,6 +79,7 @@ import {
   AngleTool,
   ArrowAnnotateTool,
   BidirectionalTool,
+  ChestWallTool,
   CircleRoiTool,
   CobbAngleTool,
   EllipticalRoiTool,
@@ -97,7 +98,6 @@ import {
   CorrectionScissorsTool,
 } from './tools/segmentation/index.js';
 import {
-  ChestWallTool,
   CrosshairsTool,
   DoubleTapFitToWindowTool,
   DragProbeTool,

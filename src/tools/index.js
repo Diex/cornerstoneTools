@@ -1,4 +1,3 @@
-import ChestWallTool from './ChestWallTool.js';
 import CrosshairsTool from './CrosshairsTool.js';
 import DoubleTapFitToWindowTool from './DoubleTapFitToWindowTool.js';
 import DragProbeTool from './DragProbeTool.js';
@@ -24,7 +23,6 @@ import ZoomTouchPinchTool from './ZoomTouchPinchTool.js';
 
 // Named Exports
 export {
-  ChestWallTool,
   CrosshairsTool,
   DoubleTapFitToWindowTool,
   DragProbeTool,
@@ -51,7 +49,6 @@ export {
 
 // Namespace, default export
 export default {
-  ChestWallTool,
   CrosshairsTool,
   DoubleTapFitToWindowTool,
   DragProbeTool,

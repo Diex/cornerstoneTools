@@ -12,7 +12,6 @@ import {
 import drawHandles from './../../../drawing/drawHandles.js';
 
 export default function(evt) {
-  // console.log('ChestWallTool: renderToolData(evt)', evt);
   const eventData = evt.detail;
   const element = evt.detail.element;
 
@@ -23,6 +22,11 @@ export default function(evt) {
 
   const width = canvas.width;
   const height = canvas.height;
+
+  // Check if there's any measurement data to render to continue
+  if (!toolData || !toolData.data) {
+    return;
+  }
 
   draw(context, ctx => {
     for (let i = 0; i < toolData.data.length; i++) {

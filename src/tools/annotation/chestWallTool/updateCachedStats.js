@@ -3,9 +3,8 @@
  */
 
 export default function(image, element, data) {
-  console.log('ChestWallTool: updateCachedStats');
+  // console.log('ChestWallTool: updateCachedStats');
   // const { rowPixelSpacing, colPixelSpacing } = getPixelSpacing(image);
-
   // console.log(image);
   // console.log(element);
   // console.log(data);

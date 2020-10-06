@@ -7,9 +7,12 @@ import { getToolState } from './../../../stateManagement/toolState.js';
 import { getLogger } from '../../../util/logger.js';
 
 const logger = getLogger('tools:annotation:ChestWallTool');
+let index = -1;
 
-const getHandle = (x, y, index, extraAttributes = {}) =>
-  Object.assign(
+const getHandle = (x, y, extraAttributes = {}) => {
+  index++;
+
+  return Object.assign(
     {
       x,
       y,
@@ -21,6 +24,7 @@ const getHandle = (x, y, index, extraAttributes = {}) =>
     },
     extraAttributes
   );
+};
 
 export default function(evt) {
   const eventData = evt.detail;

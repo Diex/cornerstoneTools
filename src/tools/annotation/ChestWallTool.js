@@ -1,5 +1,5 @@
 import BaseAnnotationTool from './../base/BaseAnnotationTool.js';
-// import { lengthCursor } from './../cursors/index.js';
+import { lengthCursor } from './../cursors/index.js';
 
 // Custom functionality
 import addNewMeasurement from './chestWallTool/addNewMeasurement';
@@ -7,6 +7,10 @@ import createNewMeasurement from './chestWallTool/createNewMeasurement';
 import pointNearTool from './chestWallTool/pointNearTool';
 import renderToolData from './chestWallTool/renderToolData';
 import updateCachedStats from './chestWallTool/updateCachedStats';
+
+import handleSelectedCallback from './chestWallTool/handleSelectedCallback.js';
+import handleSelectedMouseCallback from './chestWallTool/handleSelectedMouseCallback.js';
+import handleSelectedTouchCallback from './chestWallTool/handleSelectedTouchCallback.js';
 
 // const logger = getLogger('tools:annotation:ChestWallTool');
 
@@ -28,7 +32,7 @@ export default class ChestWallTool extends BaseAnnotationTool {
         hideHandlesIfMoving: false,
         renderDashed: false,
       },
-      // svgCursor: lengthCursor,
+      svgCursor: lengthCursor,
     };
 
     super(props, defaultProps);
@@ -38,41 +42,22 @@ export default class ChestWallTool extends BaseAnnotationTool {
     this.pointNearTool = pointNearTool.bind(this);
     this.renderToolData = renderToolData.bind(this);
 
+    this.handleSelectedCallback = handleSelectedCallback.bind(this);
+    this.handleSelectedMouseCallback = handleSelectedMouseCallback.bind(this);
+    this.handleSelectedTouchCallback = handleSelectedTouchCallback.bind(this);
+
     // TODO: implement updateCachedStats functionality
     this.updateCachedStats = updateCachedStats.bind(this);
 
     // Mode Callbacks: (element, options)
-    // this.activeCallback = this._initializeCanvasTool.bind(this);
     // this.enabledCallback = this._createMagnificationCanvas.bind(this);
     // this.disabledCallback = this._destroyMagnificationCanvas.bind(this);
 
     // this.postTouchStartCallback = this._postTouchStartCallback.bind(this);
     // this.postMouseDownCallback = this._postMouseDownCallback.bind(this);
 
-    // this.pointNearTool = pointNearTool.bind(this);
-    // this._moveCallback = _moveCallback.bind(this);
-    //
-    // this.handleSelectedCallback = handleSelectedCallback.bind(this);
-    // this.handleSelectedMouseCallback = handleSelectedMouseCallback.bind(this);
-    // this.handleSelectedTouchCallback = handleSelectedTouchCallback.bind(this);
     // this.throttledUpdateCachedStats = throttle(this.updateCachedStats, 110);
 
-    // this.preventNewMeasurement = false;
+    this.preventNewMeasurement = false;
   }
-
-  // _postTouchStartCallback(evt) {
-  //   console.log('_postTouchStartCallback');
-  //   // this._initializeCanvasTool(evt.detail.element);
-  // }
-  //
-  // _postMouseDownCallback(evt) {
-  //   console.log('_postMouseDownCallback');
-  //   // this._initializeCanvasTool(evt.detail.element);
-  //   this._initializeCanvasTool(evt);
-  // }
-
-  // renderToolData(evt) {
-  //   console.log('renderToolData');
-  //   this._initializeCanvasTool(evt.detail.element);
-  // }
 }

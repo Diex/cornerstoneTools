@@ -24,12 +24,14 @@ export default function(
 
     handle.hasMoved = true;
 
-    if (handle.index === undefined || handle.index === null) {
-      handle.x = eventData.currentPoints.image.x + distanceFromTool.x;
-      handle.y = eventData.currentPoints.image.y + distanceFromTool.y;
-    } else {
-      setHandlesPosition(handle, eventData, data, distanceFromTool);
-    }
+    handle.x = eventData.currentPoints.image.x + distanceFromTool.x;
+    handle.y = eventData.currentPoints.image.y + distanceFromTool.y;
+    // if (handle.index === undefined || handle.index === null) {
+    //   handle.x = eventData.currentPoints.image.x + distanceFromTool.x;
+    //   handle.y = eventData.currentPoints.image.y + distanceFromTool.y;
+    // } else {
+    //   setHandlesPosition(handle, eventData, data, distanceFromTool);
+    // }
 
     if (preventHandleOutsideImage) {
       handle.x = Math.max(handle.x, 0);

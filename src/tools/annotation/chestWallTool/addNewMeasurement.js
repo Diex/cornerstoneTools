@@ -19,9 +19,11 @@ const logger = getLogger('eventDispatchers:mouseEventHandlers');
 
 export default function(evt, tool) {
   logger.log('addNewMeasurement');
+  console.log('ChestWallTool:addNewMeasurement:', this.name);
 
   evt.preventDefault();
   evt.stopPropagation();
+
   const eventData = evt.detail;
   const element = eventData.element;
   const measurementData = this.createNewMeasurement(evt);
@@ -34,16 +36,16 @@ export default function(evt, tool) {
 
   external.cornerstone.updateImage(element);
 
-  const handleMover =
-    Object.keys(measurementData.handles).length === 1
-      ? moveHandle
-      : moveNewHandle;
+  // const handleMover =
+  //   Object.keys(measurementData.handles).length === 1
+  //     ? moveHandle
+  //     : moveNewHandle;
 
-  handleMover(
+  moveHandle(
     eventData,
     this.name,
     measurementData,
-    measurementData.handles.end,
+    measurementData.handles.blueCenter,
     this.options,
     'mouse',
     success => {

@@ -1,5 +1,6 @@
 import BaseAnnotationTool from './../base/BaseAnnotationTool.js';
 import { lengthCursor } from './../cursors/index.js';
+import throttle from '../../util/throttle';
 
 // Custom functionality
 import addNewMeasurement from './chestWallTool/addNewMeasurement';
@@ -13,6 +14,8 @@ import handleSelectedMouseCallback from './chestWallTool/handleSelectedMouseCall
 import handleSelectedTouchCallback from './chestWallTool/handleSelectedTouchCallback.js';
 
 // const logger = getLogger('tools:annotation:ChestWallTool');
+const emptyLocationCallback = (measurementData, eventData, doneCallback) =>
+  doneCallback();
 
 /**
  * @public
@@ -21,14 +24,17 @@ import handleSelectedTouchCallback from './chestWallTool/handleSelectedTouchCall
  * @classdesc Tool for measuring distances.
  * @extends Tools.Base.BaseAnnotationTool
  */
+
 export default class ChestWallTool extends BaseAnnotationTool {
   constructor(props = {}) {
     const defaultProps = {
       name: 'ChestWall',
       supportedInteractionTypes: ['Mouse', 'Touch'],
       configuration: {
+        changeMeasurementLocationCallback: emptyLocationCallback,
+        getMeasurementLocationCallback: emptyLocationCallback,
         drawHandles: true,
-        drawHandlesOnHover: false,
+        drawHandlesOnHover: true,
         hideHandlesIfMoving: false,
         renderDashed: false,
       },
@@ -46,8 +52,8 @@ export default class ChestWallTool extends BaseAnnotationTool {
     this.handleSelectedMouseCallback = handleSelectedMouseCallback.bind(this);
     this.handleSelectedTouchCallback = handleSelectedTouchCallback.bind(this);
 
-    // TODO: implement updateCachedStats functionality
     this.updateCachedStats = updateCachedStats.bind(this);
+    this.throttledUpdateCachedStats = throttle(this.updateCachedStats, 110);
 
     // Mode Callbacks: (element, options)
     // this.enabledCallback = this._createMagnificationCanvas.bind(this);
@@ -55,9 +61,5 @@ export default class ChestWallTool extends BaseAnnotationTool {
 
     // this.postTouchStartCallback = this._postTouchStartCallback.bind(this);
     // this.postMouseDownCallback = this._postMouseDownCallback.bind(this);
-
-    // this.throttledUpdateCachedStats = throttle(this.updateCachedStats, 110);
-
-    this.preventNewMeasurement = false;
   }
 }

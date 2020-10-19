@@ -23,10 +23,10 @@ export default function(evt, interactionType) {
 
   const measurementData = this.createNewMeasurement(eventData);
 
-  const doneCallback = () => {
-    measurementData.active = false;
-    external.cornerstone.updateImage(element);
-  };
+  console.log(
+    'BidirectionalTool.addToolState: measurementData',
+    measurementData
+  );
 
   // Associate this data with this imageId so we can render it and manipulate it
   addToolState(element, this.name, measurementData);
@@ -34,6 +34,11 @@ export default function(evt, interactionType) {
 
   const timestamp = new Date().getTime();
   const { end, perpendicularStart } = measurementData.handles;
+
+  const doneCallback = () => {
+    measurementData.active = false;
+    external.cornerstone.updateImage(element);
+  };
 
   moveNewHandle(
     eventData,

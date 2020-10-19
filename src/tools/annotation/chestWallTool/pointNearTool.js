@@ -29,7 +29,6 @@ const pointNearTool = (
 };
 
 export default function(element, data, coords, interactionType = 'mouse') {
-  // console.log('ChestWallTool.pointNearTool');
   const cornerstone = external.cornerstone;
   const cornerstoneMath = external.cornerstoneMath;
   const { handles } = data;

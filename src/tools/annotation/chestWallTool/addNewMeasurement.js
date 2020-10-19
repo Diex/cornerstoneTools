@@ -19,9 +19,11 @@ const logger = getLogger('eventDispatchers:mouseEventHandlers');
 
 export default function(evt, tool) {
   logger.log('addNewMeasurement');
+  console.log('ChestWallTool:addNewMeasurement:', this.name);
 
   evt.preventDefault();
   evt.stopPropagation();
+
   const eventData = evt.detail;
   const element = eventData.element;
   // aca cambia porque le mandamos el evt completo

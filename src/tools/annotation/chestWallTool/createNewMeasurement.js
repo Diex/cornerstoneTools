@@ -9,6 +9,13 @@ import { getLogger } from '../../../util/logger.js';
 const logger = getLogger('tools:annotation:ChestWallTool');
 let index = -1;
 
+const handleDistance = 100;
+const topRedhandleDistanceX = handleDistance * 0.6; // set line length to 60%
+const topRedHandleDistanceY = handleDistance * 0.66;
+
+const bottomRedhandleDistanceX = handleDistance * 0.8; //  set line length to 80%
+const bottomRedhandleDistanceY = handleDistance * 0.33;
+
 const getHandle = (x, y, extraAttributes = {}) => {
   index++;
 
@@ -27,9 +34,9 @@ const getHandle = (x, y, extraAttributes = {}) => {
 };
 
 export default function(evt) {
-  const eventData = evt.detail;
-
   console.log('ChestWallTool: createNewMeasurement(evt)', evt);
+
+  const eventData = evt.detail;
 
   const goodEventData =
     eventData && eventData.currentPoints && eventData.currentPoints.image;
@@ -45,28 +52,23 @@ export default function(evt) {
   const toolData = getToolState(evt.currentTarget, this.name);
 
   console.log('createNewMeasurement.toolData', toolData);
-  // This avoid to create multiple tool handlers at the same time
+  // This avoids to create multiple tool handlers at the same time
   if (toolData && toolData.data && toolData.data.length) {
     return;
   }
 
   const { x, y } = eventData.currentPoints.image;
 
-  const handleDistance = 100;
-  const topRedhandleDistanceX = handleDistance * 0.6;
-  const topRedHandleDistanceY = handleDistance * 0.66;
-
-  const bottomRedhandleDistanceX = handleDistance * 0.8;
-  const bottomRedhandleDistanceY = handleDistance * 0.33;
-
   return {
-    // toolName: this.name,
-    // toolType: this.name,
+    toolName: this.name,
+    toolType: this.name,
     visible: true,
     active: true,
     color: undefined,
     invalidated: true,
     handles: {
+      start: getHandle(x, y),
+      end: getHandle(x, y),
       // Blue Handles
       blueCenter: getHandle(x, y),
       blueLeft: getHandle(x - handleDistance, y),
@@ -93,14 +95,15 @@ export default function(evt) {
         x + bottomRedhandleDistanceX,
         y - bottomRedhandleDistanceY
       ),
-      // textBox: {
+      // textBox: getHandle(x - 50, y - 70, {
+      //   highlight: false,
+      //   hasMoved: true,
       //   active: false,
-      //   hasMoved: false,
       //   movesIndependently: false,
       //   drawnIndependently: true,
       //   allowedOutsideImage: true,
       //   hasBoundingBox: true,
-      // },
+      // }),
     },
   };
 }

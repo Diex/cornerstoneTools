@@ -13,7 +13,7 @@ import drawHandles from './../../../drawing/drawHandles.js';
 
 export default function(evt) {
   const eventData = evt.detail;
-  const element = evt.detail.element;
+  const { element, image } = eventData;
 
   const toolData = getToolState(evt.currentTarget, this.name);
 
@@ -26,6 +26,17 @@ export default function(evt) {
   // Check if there's any measurement data to render to continue
   if (!toolData || !toolData.data) {
     return;
+  }
+
+  const { data } = toolData;
+
+  // Calculate the data measurements
+  if (data.invalidated === true) {
+    if (data.longestDiameter && data.shortestDiameter) {
+      this.throttledUpdateCachedStats(image, element, data);
+    } else {
+      this.updateCachedStats(image, element, data);
+    }
   }
 
   draw(context, ctx => {

@@ -41,5 +41,10 @@ export default function(mouseEventData) {
     shortestDiameter: 0,
   };
 
+  console.log(
+    'BidirectionalTool.createNewMeasurement: measurementData',
+    measurementData
+  );
+
   return measurementData;
 }

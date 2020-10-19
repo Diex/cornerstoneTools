@@ -17,7 +17,10 @@ export default function(evt, tool) {
   evt.stopPropagation();
   const eventData = evt.detail;
   const element = eventData.element;
+
   const measurementData = tool.createNewMeasurement(eventData);
+
+  console.log('NEW MEASUREMENT:', measurementData);
 
   if (!measurementData) {
     return;

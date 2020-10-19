@@ -85,6 +85,7 @@ import {
   EllipticalRoiTool,
   FreehandRoiTool,
   LengthTool,
+  LengthToolTest,
   ProbeTool,
   RectangleRoiTool,
   TextMarkerTool,
@@ -224,6 +225,7 @@ const cornerstoneTools = {
   EllipticalRoiTool,
   FreehandRoiTool,
   LengthTool,
+  LengthToolTest,
   ProbeTool,
   RectangleRoiTool,
   TextMarkerTool,
@@ -334,6 +336,7 @@ export {
   EllipticalRoiTool,
   FreehandRoiTool,
   LengthTool,
+  LengthToolTest,
   ProbeTool,
   RectangleRoiTool,
   TextMarkerTool,
@@ -431,5 +434,7 @@ export {
 };
 
 export { default as import } from './importInternal.js';
+
+console.log('LOCAL CORNERSTONE JS');
 
 export default cornerstoneTools;

@@ -39,6 +39,8 @@ function addToolState(element, toolName, measurementData) {
   const toolStateManager = getElementToolStateManager(element);
 
   measurementData.uuid = measurementData.uuid || uuidv4();
+  console.log('addToolState', measurementData);
+
   toolStateManager.add(element, toolName, measurementData);
 
   const eventType = EVENTS.MEASUREMENT_ADDED;

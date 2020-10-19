@@ -23,13 +23,13 @@ export default function(
     const eventData = event.detail;
 
     handle.hasMoved = true;
+    handle.x = eventData.currentPoints.image.x + distanceFromTool.x;
+    handle.y = eventData.currentPoints.image.y + distanceFromTool.y;
+    // if (handle.index === undefined || handle.index === null) {
 
-    if (handle.index === undefined || handle.index === null) {
-      handle.x = eventData.currentPoints.image.x + distanceFromTool.x;
-      handle.y = eventData.currentPoints.image.y + distanceFromTool.y;
-    } else {
-      setHandlesPosition(handle, eventData, data, distanceFromTool);
-    }
+    // } else {
+    //   setHandlesPosition(handle, eventData, data, distanceFromTool);
+    // }
 
     if (preventHandleOutsideImage) {
       handle.x = Math.max(handle.x, 0);

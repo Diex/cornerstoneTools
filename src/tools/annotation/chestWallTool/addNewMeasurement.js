@@ -24,8 +24,10 @@ export default function(evt, tool) {
   evt.stopPropagation();
   const eventData = evt.detail;
   const element = eventData.element;
+  // aca cambia porque le mandamos el evt completo
   const measurementData = this.createNewMeasurement(evt);
 
+  console.log(measurementData);
   if (!measurementData) {
     return;
   }
@@ -34,16 +36,17 @@ export default function(evt, tool) {
 
   external.cornerstone.updateImage(element);
 
-  const handleMover =
-    Object.keys(measurementData.handles).length === 1
-      ? moveHandle
-      : moveNewHandle;
+  // const handleMover =
+  //   Object.keys(measurementData.handles).length === 1
+  //     ? moveHandle
+  //     : moveNewHandle;
 
-  handleMover(
+  // agarra la tool y mueve (el ndale que le dpaso)
+  moveHandle(
     eventData,
     this.name,
     measurementData,
-    measurementData.handles.end,
+    measurementData.handles.blueCenter,
     this.options,
     'mouse',
     success => {

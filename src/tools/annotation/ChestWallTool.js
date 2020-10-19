@@ -37,10 +37,14 @@ export default class ChestWallTool extends BaseAnnotationTool {
 
     super(props, defaultProps);
 
+    // todos los anotations tools tienen que definier estas funcinoes
+
     this.addNewMeasurement = addNewMeasurement.bind(this);
     this.createNewMeasurement = createNewMeasurement.bind(this);
     this.pointNearTool = pointNearTool.bind(this);
     this.renderToolData = renderToolData.bind(this);
+
+    // estas esta custom para los dibujos que tenemos que hacer.
 
     this.handleSelectedCallback = handleSelectedCallback.bind(this);
     this.handleSelectedMouseCallback = handleSelectedMouseCallback.bind(this);
@@ -48,6 +52,7 @@ export default class ChestWallTool extends BaseAnnotationTool {
 
     // TODO: implement updateCachedStats functionality
     this.updateCachedStats = updateCachedStats.bind(this);
+    this.throttledUpdateCachedStats = throttle(this.updateCachedStats, 110);
 
     // Mode Callbacks: (element, options)
     // this.enabledCallback = this._createMagnificationCanvas.bind(this);
@@ -55,8 +60,6 @@ export default class ChestWallTool extends BaseAnnotationTool {
 
     // this.postTouchStartCallback = this._postTouchStartCallback.bind(this);
     // this.postMouseDownCallback = this._postMouseDownCallback.bind(this);
-
-    // this.throttledUpdateCachedStats = throttle(this.updateCachedStats, 110);
 
     this.preventNewMeasurement = false;
   }

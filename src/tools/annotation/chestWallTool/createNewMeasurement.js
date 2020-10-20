@@ -1,9 +1,3 @@
-/*
- * ChestWallTool.createNewMeasurement(event)
- * NOTE:: createNewMeasurement is customized to receive event objet instead eventData
- * because we need to skip the creation of a new measurement if there's an existing one
- */
-import { getToolState } from './../../../stateManagement/toolState.js';
 import { getLogger } from '../../../util/logger.js';
 
 const logger = getLogger('tools:annotation:ChestWallTool');
@@ -34,7 +28,7 @@ const getHandle = (x, y, extraAttributes = {}) => {
 };
 
 export default function(evt) {
-  console.log('ChestWallTool: createNewMeasurement(evt)', evt);
+  console.log('ChestWallTool:createNewMeasurement(evt)', evt);
 
   const eventData = evt.detail;
 
@@ -46,14 +40,6 @@ export default function(evt) {
       `required eventData not supplied to tool ${this.name}'s createNewMeasurement`
     );
 
-    return;
-  }
-
-  const toolData = getToolState(evt.currentTarget, this.name);
-
-  console.log('createNewMeasurement.toolData', toolData);
-  // This avoids to create multiple tool handlers at the same time
-  if (toolData && toolData.data && toolData.data.length) {
     return;
   }
 

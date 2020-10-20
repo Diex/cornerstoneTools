@@ -60,7 +60,7 @@ export default function(evt) {
       }
 
       const lineOptions = {
-        color: 'blue',
+        color: 'green',
         lineWidth: 5,
       };
 

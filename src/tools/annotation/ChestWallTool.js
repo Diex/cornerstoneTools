@@ -43,10 +43,13 @@ export default class ChestWallTool extends BaseAnnotationTool {
 
     super(props, defaultProps);
     // todos los anotations tools tienen que definier estas funcinoes
+    // addNewMeasurmente se ejecuta cuando activo la tool
+    // addNewMeasurement es quien llama a createNewMeasurment
+    this.addNewMeasurement = addNewMeasurement.bind(this);
+
     this.createNewMeasurement = createNewMeasurement.bind(this);
     this.pointNearTool = pointNearTool.bind(this);
     this.renderToolData = renderToolData.bind(this);
-    this.addNewMeasurement = addNewMeasurement.bind(this);
 
     // estas esta custom para los dibujos que tenemos que hacer.
 

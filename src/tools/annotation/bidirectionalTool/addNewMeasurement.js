@@ -94,6 +94,7 @@ export default function(evt, interactionType) {
         measurementData,
       };
 
+      console.log(modifiedEventData);
       triggerEvent(element, EVENTS.MEASUREMENT_MODIFIED, modifiedEventData);
       triggerEvent(element, EVENTS.MEASUREMENT_COMPLETED, modifiedEventData);
     }

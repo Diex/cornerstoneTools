@@ -11,7 +11,7 @@ import LengthToolTest from './LengthToolTest.js';
 import ProbeTool from './ProbeTool.js';
 import RectangleRoiTool from './RectangleRoiTool.js';
 import TextMarkerTool from './TextMarkerTool.js';
-
+import DiexTestTool from './DiexTestTool.js';
 // Named Exports
 export { default as AngleTool } from './AngleTool.js';
 export { default as ArrowAnnotateTool } from './ArrowAnnotateTool.js';
@@ -35,6 +35,7 @@ export default {
   ChestWallTool,
   CircleRoiTool,
   CobbAngleTool,
+  DiexTestTool,
   EllipticalRoiTool,
   FreehandRoiTool,
   LengthTool,

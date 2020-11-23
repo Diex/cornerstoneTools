@@ -41,7 +41,11 @@ export default function(evt) {
 
   draw(context, ctx => {
     for (let i = 0; i < toolData.data.length; i++) {
+      // console.log('diex: >>>', toolData);
+
       const data = toolData.data[i];
+
+      // console.log(data);
 
       if (data.visible === false) {
         continue;

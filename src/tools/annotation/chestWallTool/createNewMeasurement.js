@@ -1,6 +1,7 @@
 import { getLogger } from '../../../util/logger.js';
 
 const logger = getLogger('tools:annotation:ChestWallTool');
+
 let index = -1;
 
 const handleDistance = 100;
@@ -11,8 +12,7 @@ const bottomRedhandleDistanceX = handleDistance * 0.8; //  set line length to 80
 const bottomRedhandleDistanceY = handleDistance * 0.33;
 
 const getHandle = (x, y, extraAttributes = {}) => {
-  index++;
-
+  // index++;
   return Object.assign(
     {
       x,
@@ -28,9 +28,7 @@ const getHandle = (x, y, extraAttributes = {}) => {
 };
 
 export default function(evt) {
-  console.log('ChestWallTool:createNewMeasurement(evt)', evt);
-
-  const eventData = evt.detail;
+  const eventData = evt;
 
   const goodEventData =
     eventData && eventData.currentPoints && eventData.currentPoints.image;
@@ -48,10 +46,12 @@ export default function(evt) {
   return {
     toolName: this.name,
     toolType: this.name,
+
     visible: true,
     active: true,
     color: undefined,
-    invalidated: true,
+    // esto...
+    invalidated: false,
     handles: {
       start: getHandle(x, y),
       end: getHandle(x, y),

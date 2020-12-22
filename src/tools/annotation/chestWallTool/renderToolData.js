@@ -8,8 +8,12 @@ import {
   draw,
   setShadow,
   drawLine,
+  drawRect,
+  fillBox,
 } from './../../../drawing/index.js';
 import drawHandles from './../../../drawing/drawHandles.js';
+import makerjs from 'makerjs';
+import external from '../../../externalModules.js';
 
 export default function(evt) {
   const eventData = evt.detail;
@@ -60,7 +64,7 @@ export default function(evt) {
 
       //  Render Blue Handles
       if (this.configuration.drawHandles) {
-        drawHandles(context, eventData, data.handles, handleOptions);
+        // drawHandles(context, eventData, data.handles, handleOptions);
       }
 
       const lineOptions = {
@@ -68,65 +72,132 @@ export default function(evt) {
         lineWidth: 5,
       };
 
-      drawLine(
+      // drawLine(
+      //   ctx,
+      //   element,
+      //   data.handles.blueCenter,
+      //   data.handles.blueLeft,
+      //   lineOptions
+      // );
+
+      // drawLine(
+      //   ctx,
+      //   element,
+      //   data.handles.blueCenter,
+      //   data.handles.blueRight,
+      //   lineOptions
+      // );
+
+      // drawLine(
+      //   ctx,
+      //   element,
+      //   data.handles.blueCenter,
+      //   data.handles.blueTop,
+      //   lineOptions
+      // );
+
+      // //  Render Red Handles
+      // handleOptions.color = 'red';
+      // lineOptions.color = 'red';
+
+      // drawLine(
+      //   ctx,
+      //   element,
+      //   data.handles.redTopCenter,
+      //   data.handles.redTopLeft,
+      //   lineOptions
+      // );
+
+      // drawLine(
+      //   ctx,
+      //   element,
+      //   data.handles.redTopCenter,
+      //   data.handles.redTopRight,
+      //   lineOptions
+      // );
+
+      // drawLine(
+      //   ctx,
+      //   element,
+      //   data.handles.redBottomCenter,
+      //   data.handles.redBottomLeft,
+      //   lineOptions
+      // );
+
+      // drawLine(
+      //   ctx,
+      //   element,
+      //   data.handles.redBottomCenter,
+      //   data.handles.redBottomRight,
+      //   lineOptions
+      // );
+
+      /// Rendering SVG
+
+      // blue temporal background
+      fillBox(
         ctx,
-        element,
-        data.handles.blueCenter,
-        data.handles.blueLeft,
-        lineOptions
+        { left: 0, top: 0, width: 800, height: 800 },
+        'cornflowerblue'
       );
 
-      drawLine(
-        ctx,
+      // Get Mouse Position
+      const svgStart = external.cornerstone.pixelToCanvas(
         element,
-        data.handles.blueCenter,
-        data.handles.blueRight,
-        lineOptions
+        data.handles.blueCenter
       );
 
-      drawLine(
-        ctx,
-        element,
-        data.handles.blueCenter,
-        data.handles.blueTop,
-        lineOptions
-      );
+      // Rect SVG
+      var rectSVGModel = new makerjs.models.Rectangle(40, 80);
 
-      //  Render Red Handles
-      handleOptions.color = 'red';
-      lineOptions.color = 'red';
+      // Straight Face
+      var renderOptions = {
+        origin: [svgStart.x, svgStart.y],
+        annotate: true,
+        flow: { size: 8 },
+        svgAttrs: {
+          id: 'drawing',
+          style: 'margin-left:' + 0 + 'px; margin-top:' + 0 + 'px',
+          stroke: 'white',
+          fill: 'white',
+        },
+        strokeWidth: 2 + 'px',
+        fontSize: 14 + 'px',
+        scale: 100,
+        useSvgPathOnly: false,
+      };
 
-      drawLine(
-        ctx,
-        element,
-        data.handles.redTopCenter,
-        data.handles.redTopLeft,
-        lineOptions
-      );
+      var StraightFace = /** @class */ (function() {
+        function StraightFace() {
+          this.paths = {
+            head: new makerjs.paths.Circle([0, 0], 85),
+            eye1: new makerjs.paths.Circle([-25, 25], 10),
+            eye2: new makerjs.paths.Circle([25, 25], 10),
+            mouth: new makerjs.paths.Line([-30, -30], [30, -30]),
+          };
+        }
+        return StraightFace;
+      })();
 
-      drawLine(
-        ctx,
-        element,
-        data.handles.redTopCenter,
-        data.handles.redTopRight,
-        lineOptions
-      );
+      const straightFaceSVGModel = new StraightFace();
 
-      drawLine(
-        ctx,
-        element,
-        data.handles.redBottomCenter,
-        data.handles.redBottomLeft,
-        lineOptions
-      );
+      // SVG image
+      // const svgImage = makerjs.exporter.toSVG(
+      //   straightFaceSVGModel,
+      //   renderOptions
+      // );
+      const svgImage = makerjs.exporter.toSVG(rectSVGModel);
 
-      drawLine(
-        ctx,
-        element,
-        data.handles.redBottomCenter,
-        data.handles.redBottomRight,
-        lineOptions
-      );
+      var DOMURL = window.URL || window.webkitURL || window;
+      var img1 = new Image();
+      var svg = new Blob([svgImage], { type: 'image/svg+xml' });
+      var url = DOMURL.createObjectURL(svg);
+
+      img1.onload = function() {
+        ctx.drawImage(img1, svgStart.x, svgStart.y);
+        DOMURL.revokeObjectURL(url);
+      };
+      img1.src = url;
     }
   });
 }

@@ -135,11 +135,11 @@ export default function(evt) {
       /// Rendering SVG
 
       // blue temporal background
-      fillBox(
-        ctx,
-        { left: 0, top: 0, width: 800, height: 800 },
-        'cornflowerblue'
-      );
+      // fillBox(
+      //   ctx,
+      //   { left: 0, top: 0, width: 800, height: 800 },
+      //   'cornflowerblue'
+      // );
 
       // Get Mouse Position
       const svgStart = external.cornerstone.pixelToCanvas(
@@ -148,51 +148,39 @@ export default function(evt) {
       );
 
       // Rect SVG
-      var rectSVGModel = new makerjs.models.Rectangle(40, 80);
+      var rectSVGModel = new makerjs.models.Rectangle(100, 100);
 
       // Straight Face
       var renderOptions = {
-        origin: [svgStart.x, svgStart.y],
-        annotate: true,
-        flow: { size: 8 },
+        // origin: [svgStart.x, svgStart.y],
+        annotate: false,
+        // flow: { size: 8 },
         svgAttrs: {
-          id: 'drawing',
-          style: 'margin-left:' + 0 + 'px; margin-top:' + 0 + 'px',
-          stroke: 'white',
-          fill: 'white',
+          // id: 'drawing',
+          // style: 'margin-left:' + 0 + 'px; margin-top:' + 0 + 'px',
+          // stroke: 'white',
+          // fill: 'white',
         },
         strokeWidth: 2 + 'px',
-        fontSize: 14 + 'px',
-        scale: 100,
-        useSvgPathOnly: false,
+        // fontSize: 14 + 'px',
+        scale: 1,
+        fill: '#f00',
+        stroke: '#fff',
+        // useSvgPathOnly: false,
       };
 
-      var StraightFace = /** @class */ (function() {
-        function StraightFace() {
-          this.paths = {
-            head: new makerjs.paths.Circle([0, 0], 85),
-            eye1: new makerjs.paths.Circle([-25, 25], 10),
-            eye2: new makerjs.paths.Circle([25, 25], 10),
-            mouth: new makerjs.paths.Line([-30, -30], [30, -30]),
-          };
-        }
-        return StraightFace;
-      })();
-
-      const straightFaceSVGModel = new StraightFace();
-
       // SVG image
-      // const svgImage = makerjs.exporter.toSVG(
-      //   straightFaceSVGModel,
-      //   renderOptions
-      // );
-      const svgImage = makerjs.exporter.toSVG(rectSVGModel);
+      const svgImage = makerjs.exporter.toSVG(rectSVGModel, renderOptions);
+      // const svgImage = makerjs.exporter.toSVG(rectSVGModel);
+
+      // const svgImage = makerjs.exporter.toSVG(rectSVGModel);
 
       var DOMURL = window.URL || window.webkitURL || window;
-      var img1 = new Image();
+
       var svg = new Blob([svgImage], { type: 'image/svg+xml' });
       var url = DOMURL.createObjectURL(svg);
 
+      var img1 = new Image();
       img1.onload = function() {
         ctx.drawImage(img1, svgStart.x, svgStart.y);
         DOMURL.revokeObjectURL(url);

@@ -15,6 +15,8 @@ import drawHandles from './../../../drawing/drawHandles.js';
 import makerjs from 'makerjs';
 import external from '../../../externalModules.js';
 
+import HalfBandClamp from 'makerjs-half-band-clamp';
+
 export default function(evt) {
   const eventData = evt.detail;
   const { element, image } = eventData;
@@ -43,34 +45,69 @@ export default function(evt) {
     }
   }
 
+  function BandClamp(
+    radius,
+    band,
+    tabWidth,
+    tabHeight,
+    gap,
+    angle,
+    roundFillet,
+    capFillet
+  ) {
+    var half = new HalfBandClamp(radius, band, tabWidth, tabHeight, gap);
+
+    function tryFillet(fName, pName1, pName2, value) {
+      var fillet = makerjs.path.fillet(
+        half.paths[pName1],
+        half.paths[pName2],
+        value
+      );
+      if (fillet) {
+        half.paths[fName] = fillet;
+      }
+    }
+
+    tryFillet('innerFillet', 'bandInner', 'tabInner', roundFillet);
+    tryFillet('outerFillet', 'bandOuter', 'tabOuter', roundFillet);
+
+    tryFillet('tabInnerFillet', 'tabInner', 'tabCap', capFillet);
+    tryFillet('tabOuterFillet', 'tabOuter', 'tabCap', capFillet);
+
+    makerjs.model.rotate(half, angle / 2);
+
+    this.models = {
+      top: half,
+      bottom: makerjs.model.mirror(half, false, true),
+    };
+
+    return makerjs.model.combine(this.models.top, this.models.bottom);
+  }
+
   draw(context, ctx => {
     for (let i = 0; i < toolData.data.length; i++) {
-      // console.log('diex: >>>', toolData);
-
+      console.log('tooldata: >>>', toolData);
       const data = toolData.data[i];
 
-      // console.log(data);
-
-      if (data.visible === false) {
-        continue;
-      }
+      // if (data.visible === false) {
+      //   continue;
+      // }
 
       const handleOptions = {
-        color: 'blue',
+        color: 'white',
         handleRadius: 5,
         drawHandlesIfActive: this.configuration.drawHandlesOnHover,
         hideHandlesIfMoving: this.configuration.hideHandlesIfMoving,
       };
 
-      //  Render Blue Handles
       if (this.configuration.drawHandles) {
-        // drawHandles(context, eventData, data.handles, handleOptions);
+        drawHandles(context, eventData, data.handles, handleOptions);
       }
 
-      const lineOptions = {
-        color: 'green',
-        lineWidth: 5,
-      };
+      // const lineOptions = {
+      //   color: 'green',
+      //   lineWidth: 5,
+      // };
 
       // drawLine(
       //   ctx,
@@ -80,75 +117,17 @@ export default function(evt) {
       //   lineOptions
       // );
 
-      // drawLine(
-      //   ctx,
-      //   element,
-      //   data.handles.blueCenter,
-      //   data.handles.blueRight,
-      //   lineOptions
-      // );
-
-      // drawLine(
-      //   ctx,
-      //   element,
-      //   data.handles.blueCenter,
-      //   data.handles.blueTop,
-      //   lineOptions
-      // );
-
-      // //  Render Red Handles
-      // handleOptions.color = 'red';
-      // lineOptions.color = 'red';
-
-      // drawLine(
-      //   ctx,
-      //   element,
-      //   data.handles.redTopCenter,
-      //   data.handles.redTopLeft,
-      //   lineOptions
-      // );
-
-      // drawLine(
-      //   ctx,
-      //   element,
-      //   data.handles.redTopCenter,
-      //   data.handles.redTopRight,
-      //   lineOptions
-      // );
-
-      // drawLine(
-      //   ctx,
-      //   element,
-      //   data.handles.redBottomCenter,
-      //   data.handles.redBottomLeft,
-      //   lineOptions
-      // );
-
-      // drawLine(
-      //   ctx,
-      //   element,
-      //   data.handles.redBottomCenter,
-      //   data.handles.redBottomRight,
-      //   lineOptions
-      // );
-
-      /// Rendering SVG
-
-      // blue temporal background
-      // fillBox(
-      //   ctx,
-      //   { left: 0, top: 0, width: 800, height: 800 },
-      //   'cornflowerblue'
-      // );
-
       // Get Mouse Position
       const svgStart = external.cornerstone.pixelToCanvas(
         element,
         data.handles.blueCenter
       );
 
+      // var makerjs = require('makerjs');
+
       // Rect SVG
-      var rectSVGModel = new makerjs.models.Rectangle(100, 100);
+      // var rectSVGModel = new makerjs.models.Rectangle(100, 100);
+      var rectSVGModel = BandClamp(100, 10, 20, 20, 20, 180, 12, 12);
 
       // Straight Face
       var renderOptions = {

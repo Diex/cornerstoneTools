@@ -14,7 +14,7 @@ import handleSelectedMouseCallback from './chestWallTool/handleSelectedMouseCall
 import handleSelectedTouchCallback from './chestWallTool/handleSelectedTouchCallback.js';
 import getPixelSpacing from '../../util/getPixelSpacing';
 import calculateLongestAndShortestDiameters from './bidirectionalTool/utils/calculateLongestAndShortestDiameters';
-// const logger = getLogger('tools:annotation:ChestWallTool');
+
 const emptyLocationCallback = (measurementData, eventData, doneCallback) =>
   doneCallback();
 
@@ -44,19 +44,17 @@ export default class ChestWallTool extends BaseAnnotationTool {
     };
 
     super(props, defaultProps);
-    // todos los anotations tools tienen que definier estas funcinoes
-    // addNewMeasurmente se ejecuta cuando activo la tool
-    // addNewMeasurement es quien llama a createNewMeasurment
+    // todos los anotations tools tienen que definier estas funciones
+    // addNewMeasurment se ejecuta cuando activo la tool y llama a createNewMeasurment
+    this.addNewMeasurement = addNewMeasurement.bind(this);
+    this.createNewMeasurement = createNewMeasurement.bind(this);
+
     this.throttledUpdateCachedStats = throttle(this.updateCachedStats, 110);
 
-    this.createNewMeasurement = createNewMeasurement.bind(this);
     this.pointNearTool = pointNearTool.bind(this);
     this.renderToolData = renderToolData.bind(this);
 
-    this.addNewMeasurement = addNewMeasurement.bind(this);
-
     // estas esta custom para los dibujos que tenemos que hacer.
-
     this.handleSelectedCallback = handleSelectedCallback.bind(this);
     this.handleSelectedMouseCallback = handleSelectedMouseCallback.bind(this);
     this.handleSelectedTouchCallback = handleSelectedTouchCallback.bind(this);
@@ -66,7 +64,6 @@ export default class ChestWallTool extends BaseAnnotationTool {
     // Mode Callbacks: (element, options)
     // this.enabledCallback = this._createMagnificationCanvas.bind(this);
     // this.disabledCallback = this._destroyMagnificationCanvas.bind(this);
-
     // this.postTouchStartCallback = this._postTouchStartCallback.bind(this);
     // this.postMouseDownCallback = this._postMouseDownCallback.bind(this);
   }

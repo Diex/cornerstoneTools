@@ -31,7 +31,7 @@ export default function(evt, interactionType) {
 
   const { element, image, buttons } = eventData;
 
-  console.log('ChestWallTool:addNewMeasurement:', this.name);
+  // console.log('ChestWallTool:addNewMeasurement:', this.name);
 
   evt.preventDefault();
   evt.stopPropagation();
@@ -74,7 +74,7 @@ export default function(evt, interactionType) {
     eventData,
     this.name,
     measurementData,
-    measurementData.handles.blueCenter,
+    measurementData.handles.end,
     {}, // this.options,
     interactionType, // 'mouse',
     success => {

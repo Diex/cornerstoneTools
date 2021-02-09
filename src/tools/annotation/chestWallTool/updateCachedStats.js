@@ -4,7 +4,7 @@
 import getPixelSpacing from '../../../util/getPixelSpacing';
 
 export default function(image, element, data) {
-  console.log('ChestWallTool:updateCachedStats:name', data.toolName, this.name);
+  // console.log('ChestWallTool:updateCachedStats:name', data.toolName, this.name);
   // Prevent updating other tools' data
   if (data.toolName !== this.name) {
     return;
@@ -25,7 +25,7 @@ export default function(image, element, data) {
   data.centerRightLength = 100;
   data.centerLeftLength = 100;
   data.invalidated = false;
-  console.log('ChestWallTool:data:name', data);
+  // console.log('ChestWallTool:data:name', data);
 }
 
 function calculateLongestAndShortestDiameters(measurementData, pixelSpacing) {

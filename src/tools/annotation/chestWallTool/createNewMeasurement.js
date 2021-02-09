@@ -10,11 +10,12 @@ const topRedHandleDistanceY = handleDistance * 0.66;
 const bottomRedhandleDistanceX = handleDistance * 0.8; //  set line length to 80%
 const bottomRedhandleDistanceY = handleDistance * 0.33;
 
-const getHandle = (x, y, extraAttributes = {}) => {
+const getHandle = (x, y, name, extraAttributes = {}) => {
   index++;
 
   return Object.assign(
     {
+      name,
       x,
       y,
       index,
@@ -53,8 +54,8 @@ export default function(evt) {
     color: undefined,
     invalidated: true,
     handles: {
-      start: getHandle(x, y),
-      end: getHandle(x, y),
+      start: getHandle(x, y, 'start'),
+      end: getHandle(x, y, 'end'),
       // Blue Handles
       blueCenter: getHandle(x, y),
       blueLeft: getHandle(x - handleDistance, y),

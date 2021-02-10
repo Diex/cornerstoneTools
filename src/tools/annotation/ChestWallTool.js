@@ -32,10 +32,10 @@ export default class ChestWallTool extends BaseAnnotationTool {
       name: 'ChestWall',
       supportedInteractionTypes: ['Mouse', 'Touch'],
       configuration: {
-        changeMeasurementLocationCallback: emptyLocationCallback,
-        getMeasurementLocationCallback: emptyLocationCallback,
+        // changeMeasurementLocationCallback: emptyLocationCallback,
+        // getMeasurementLocationCallback: emptyLocationCallback,
         drawHandles: true,
-        drawHandlesOnHover: true,
+        drawHandlesOnHover: false,
         hideHandlesIfMoving: false,
         renderDashed: false,
         additionalData: [],
@@ -49,9 +49,8 @@ export default class ChestWallTool extends BaseAnnotationTool {
     this.addNewMeasurement = addNewMeasurement.bind(this);
     this.createNewMeasurement = createNewMeasurement.bind(this);
 
-    this.throttledUpdateCachedStats = throttle(this.updateCachedStats, 110);
-
     this.pointNearTool = pointNearTool.bind(this);
+
     this.renderToolData = renderToolData.bind(this);
 
     // estas esta custom para los dibujos que tenemos que hacer.
@@ -60,6 +59,7 @@ export default class ChestWallTool extends BaseAnnotationTool {
     this.handleSelectedTouchCallback = handleSelectedTouchCallback.bind(this);
 
     this.updateCachedStats = updateCachedStats.bind(this);
+    this.throttledUpdateCachedStats = throttle(this.updateCachedStats, 110);
 
     // Mode Callbacks: (element, options)
     // this.enabledCallback = this._createMagnificationCanvas.bind(this);

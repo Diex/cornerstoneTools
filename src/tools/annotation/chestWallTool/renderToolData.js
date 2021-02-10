@@ -14,25 +14,32 @@ import {
 import drawHandles from './../../../drawing/drawHandles.js';
 import makerjs from 'makerjs';
 import external from '../../../externalModules.js';
+import BandClamp from './bar.js';
+import getPixelSpacing from '../../../util/getPixelSpacing.js';
+import zoomUtils from '../../../util/zoom/index.js';
 
-import HalfBandClamp from 'makerjs-half-band-clamp';
+const { correctShift, changeViewportScale } = zoomUtils;
 
 export default function(evt) {
-  const eventData = evt.detail;
-  const { element, image } = eventData;
+  const { element, image, viewport } = evt.detail;
 
   const toolData = getToolState(evt.currentTarget, this.name);
 
   const canvas = element.querySelector('canvas.cornerstone-canvas');
   const context = getNewContext(canvas);
 
-  const width = canvas.width;
-  const height = canvas.height;
-
   // Check if there's any measurement data to render to continue
   if (!toolData || !toolData.data) {
     return;
   }
+  // Calculate the new scale factor based on how far the mouse has changed
+  // const updatedViewport = changeViewportScale(viewport, 0, {
+  //   minScale: 1,
+  //   maxScale: 1,
+  // });
+  // external.cornerstone.setViewport(element, updatedViewport);
+
+  const { rowPixelSpacing, colPixelSpacing } = 0.68; //getPixelSpacing(image);
 
   const { data } = toolData;
 
@@ -43,45 +50,6 @@ export default function(evt) {
     } else {
       this.updateCachedStats(image, element, data);
     }
-  }
-
-  function BandClamp(
-    radius,
-    band,
-    tabWidth,
-    tabHeight,
-    gap,
-    angle,
-    roundFillet,
-    capFillet
-  ) {
-    var half = new HalfBandClamp(radius, band, tabWidth, tabHeight, gap);
-
-    function tryFillet(fName, pName1, pName2, value) {
-      var fillet = makerjs.path.fillet(
-        half.paths[pName1],
-        half.paths[pName2],
-        value
-      );
-      if (fillet) {
-        half.paths[fName] = fillet;
-      }
-    }
-
-    tryFillet('innerFillet', 'bandInner', 'tabInner', roundFillet);
-    tryFillet('outerFillet', 'bandOuter', 'tabOuter', roundFillet);
-
-    tryFillet('tabInnerFillet', 'tabInner', 'tabCap', capFillet);
-    tryFillet('tabOuterFillet', 'tabOuter', 'tabCap', capFillet);
-
-    makerjs.model.rotate(half, angle / 2);
-
-    this.models = {
-      top: half,
-      bottom: makerjs.model.mirror(half, false, true),
-    };
-
-    return makerjs.model.combine(this.models.top, this.models.bottom);
   }
 
   draw(context, ctx => {
@@ -101,21 +69,8 @@ export default function(evt) {
       };
 
       if (this.configuration.drawHandles) {
-        drawHandles(context, eventData, data.handles, handleOptions);
+        // drawHandles(context, eventData, data.handles, handleOptions);
       }
-
-      // const lineOptions = {
-      //   color: 'green',
-      //   lineWidth: 5,
-      // };
-
-      // drawLine(
-      //   ctx,
-      //   element,
-      //   data.handles.blueCenter,
-      //   data.handles.blueLeft,
-      //   lineOptions
-      // );
 
       // Get Mouse Position
       const svgStart = external.cornerstone.pixelToCanvas(
@@ -123,13 +78,12 @@ export default function(evt) {
         data.handles.blueCenter
       );
 
-      // var makerjs = require('makerjs');
-
       // Rect SVG
-      // var rectSVGModel = new makerjs.models.Rectangle(100, 100);
-      var rectSVGModel = BandClamp(100, 10, 20, 20, 20, 180, 12, 12);
+      var radius = (50 * 100) / 150;
+      var rectSVGModel = BandClamp(50, 10, 1, 1, 60, 90, 12, 12);
 
-      // Straight Face
+      // var rectSVGModel = new makerjs.models.Square(100 * rowPixelSpacing);
+      rectSVGModel.units = makerjs.unitType.Millimeter;
       var renderOptions = {
         // origin: [svgStart.x, svgStart.y],
         annotate: false,
@@ -149,22 +103,26 @@ export default function(evt) {
       };
 
       // SVG image
-      const svgImage = makerjs.exporter.toSVG(rectSVGModel, renderOptions);
-      // const svgImage = makerjs.exporter.toSVG(rectSVGModel);
+      const svgmodel = makerjs.exporter.toSVG(rectSVGModel, renderOptions);
 
-      // const svgImage = makerjs.exporter.toSVG(rectSVGModel);
+      // document.write(svgmodel);
+      // https://developer.mozilla.org/en-US/docs/Web/API/URL
+      var URL = window.URL || window.webkitURL || window;
 
-      var DOMURL = window.URL || window.webkitURL || window;
+      var svg = new Blob([svgmodel], { type: 'image/svg+xml' });
+      var url = URL.createObjectURL(svg);
 
-      var svg = new Blob([svgImage], { type: 'image/svg+xml' });
-      var url = DOMURL.createObjectURL(svg);
+      // let path = new Path2D(svgmodel);
+      // ctx.fillStyle = 'green';
+      // ctx.fill(path);
 
-      var img1 = new Image();
-      img1.onload = function() {
-        ctx.drawImage(img1, svgStart.x, svgStart.y);
-        DOMURL.revokeObjectURL(url);
+      // https://stackoverflow.com/questions/3768565/drawing-an-svg-file-on-a-html5-canvas
+      var render = new Image();
+      render.onload = function() {
+        ctx.drawImage(render, svgStart.x, svgStart.y);
+        URL.revokeObjectURL(url);
       };
-      img1.src = url;
+      render.src = url;
     }
   });
 }

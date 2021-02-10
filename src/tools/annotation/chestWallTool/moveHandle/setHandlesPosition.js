@@ -1,4 +1,4 @@
-import external from './../../../../externalModules.js';
+import external from '../../../../externalModules.js';
 import moveAllHandles from './moveHandle/moveAllHandles.js';
 import movePerpendicularLine from './movePerpendicularLine/movePerpendicularLine.js';
 

@@ -74,7 +74,7 @@ export default function(evt, interactionType) {
     eventData,
     this.name,
     measurementData,
-    measurementData.handles.end,
+    measurementData.handles.center,
     {}, // this.options,
     interactionType, // 'mouse',
     success => {

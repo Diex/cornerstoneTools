@@ -3,7 +3,7 @@ import { getLogger } from '../../../util/logger.js';
 const logger = getLogger('tools:annotation:ChestWallTool');
 let index = -1;
 
-const handleDistance = 100;
+const handleDistance = 200;
 const topRedhandleDistanceX = handleDistance * 0.6; // set line length to 60%
 const topRedHandleDistanceY = handleDistance * 0.66;
 
@@ -54,34 +54,43 @@ export default function(evt) {
     color: undefined,
     invalidated: true,
     handles: {
-      start: getHandle(x, y, 'start'),
-      end: getHandle(x, y, 'end'),
+      // start: getHandle(x, y, 'start'),
+      // end: getHandle(x, y, 'end'),
+
+      center: getHandle(x, y),
+      left: getHandle(x - handleDistance, y),
+      right: getHandle(x + handleDistance, y),
+      top: getHandle(x, y - handleDistance),
+
+      topLeft: getHandle(x - topRedhandleDistanceX, y - topRedHandleDistanceY),
+      topRight: getHandle(x + topRedhandleDistanceX, y - topRedHandleDistanceY),
+
       // Blue Handles
-      blueCenter: getHandle(x, y),
-      blueLeft: getHandle(x - handleDistance, y),
-      blueRight: getHandle(x + handleDistance, y),
-      blueTop: getHandle(x, y - handleDistance),
+      // blueCenter: getHandle(x, y),
+      // blueLeft: getHandle(x - handleDistance, y),
+      // blueRight: getHandle(x + handleDistance, y),
+      // blueTop: getHandle(x, y - handleDistance),
 
       // Red Handles
-      redTopCenter: getHandle(x, y - topRedHandleDistanceY),
-      redTopLeft: getHandle(
-        x - topRedhandleDistanceX,
-        y - topRedHandleDistanceY
-      ),
-      redTopRight: getHandle(
-        x + topRedhandleDistanceX,
-        y - topRedHandleDistanceY
-      ),
+      // redTopCenter: getHandle(x, y - topRedHandleDistanceY),
+      // redTopLeft: getHandle(
+      //   x - topRedhandleDistanceX,
+      //   y - topRedHandleDistanceY
+      // ),
+      // redTopRight: getHandle(
+      //   x + topRedhandleDistanceX,
+      //   y - topRedHandleDistanceY
+      // ),
 
-      redBottomCenter: getHandle(x, y - bottomRedhandleDistanceY),
-      redBottomLeft: getHandle(
-        x - bottomRedhandleDistanceX,
-        y - bottomRedhandleDistanceY
-      ),
-      redBottomRight: getHandle(
-        x + bottomRedhandleDistanceX,
-        y - bottomRedhandleDistanceY
-      ),
+      // redBottomCenter: getHandle(x, y - bottomRedhandleDistanceY),
+      // redBottomLeft: getHandle(
+      //   x - bottomRedhandleDistanceX,
+      //   y - bottomRedhandleDistanceY
+      // ),
+      // redBottomRight: getHandle(
+      //   x + bottomRedhandleDistanceX,
+      //   y - bottomRedhandleDistanceY
+      // ),
       // textBox: getHandle(x - 50, y - 70, {
       //   highlight: false,
       //   hasMoved: true,

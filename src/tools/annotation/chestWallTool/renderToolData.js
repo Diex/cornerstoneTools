@@ -43,6 +43,7 @@ export default function(evt) {
   draw(context, ctx => {
     for (let i = 0; i < toolData.data.length; i++) {
       const data = toolData.data[i];
+      const { handles } = data;
 
       if (data.visible === false) {
         continue;
@@ -52,95 +53,55 @@ export default function(evt) {
 
       const handleOptions = {
         color: 'blue',
-        handleRadius: 5,
+        handleRadius: 10,
         drawHandlesIfActive: this.configuration.drawHandlesOnHover,
         hideHandlesIfMoving: this.configuration.hideHandlesIfMoving,
       };
 
+      // Drawing handles connected to lines only
+      const handlesDraw = [
+        handles.left,
+        handles.right,
+        handles.topLeft,
+        handles.topRight,
+      ];
+
       if (this.configuration.drawHandles) {
-        drawHandles(context, eventData, data.handles, handleOptions);
+        drawHandles(context, eventData, handlesDraw, handleOptions);
       }
 
       // Draw Lines and Bezier Curve
 
       lineOptions = {
         color: 'blue',
-        lineWidth: 5,
+        lineWidth: 2,
       };
 
-      drawLine(
-        ctx,
-        element,
-        data.handles.blueCenter,
-        data.handles.blueLeft,
-        lineOptions
-      );
-
-      drawLine(
-        ctx,
-        element,
-        data.handles.blueCenter,
-        data.handles.blueRight,
-        lineOptions
-      );
-
-      // drawLine(
-      //   ctx,
-      //   element,
-      //   data.handles.blueCenter,
-      //   data.handles.blueTop,
-      //   lineOptions
-      // );
+      drawLine(ctx, element, handles.left, handles.right, lineOptions);
 
       //  Render Red Handles
-      lineOptions.color = 'red';
+      lineOptions = {
+        color: 'red',
+        lineWidth: 2,
+      };
 
-      drawLine(
-        ctx,
-        element,
-        data.handles.blueCenter,
-        data.handles.redTopLeft,
-        lineOptions
-      );
-
-      drawLine(
-        ctx,
-        element,
-        data.handles.blueCenter,
-        data.handles.redTopRight,
-        lineOptions
-      );
-
-      // drawLine(
-      //   ctx,
-      //   element,
-      //   data.handles.redBottomCenter,
-      //   data.handles.redBottomLeft,
-      //   lineOptions
-      // );
-
-      // drawLine(
-      //   ctx,
-      //   element,
-      //   data.handles.redBottomCenter,
-      //   data.handles.redBottomRight,
-      //   lineOptions
-      // );
+      drawLine(ctx, element, handles.left, handles.topLeft, lineOptions);
+      drawLine(ctx, element, handles.right, handles.topRight, lineOptions);
 
       // Draw Curves and Lines
 
       let lineOptions = {
-        color: 'yellow',
+        color: 'coral',
         lineWidth: 10,
       };
 
       drawBezierCurve(
         ctx,
         element,
-        data.handles.blueLeft,
-        data.handles.redTopLeft,
-        data.handles.redTopRight,
-        data.handles.blueRight,
+        handles.left,
+        handles.topLeft,
+        handles.topRight,
+        handles.right,
         lineOptions
       );
     }

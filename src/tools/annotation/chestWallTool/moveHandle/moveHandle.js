@@ -33,7 +33,7 @@ export default function(
     //   handle.x = eventData.currentPoints.image.x + distanceFromTool.x;
     //   handle.y = eventData.currentPoints.image.y + distanceFromTool.y;
     // } else {
-    //   setHandlesPosition(handle, eventData, data, distanceFromTool);
+    //   // updateHandlesPosition(handle, eventData, data, distanceFromTool);
     // }
 
     if (preventHandleOutsideImage) {

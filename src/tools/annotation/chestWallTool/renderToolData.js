@@ -50,7 +50,6 @@ export default function(evt) {
       }
 
       // Draw Handles
-
       const handleOptions = {
         color: 'blue',
         handleRadius: 10,
@@ -58,8 +57,7 @@ export default function(evt) {
         hideHandlesIfMoving: this.configuration.hideHandlesIfMoving,
       };
 
-      // Drawing handles connected to lines only
-      const handlesDraw = [
+      const handlesToDraw = [
         handles.left,
         handles.right,
         handles.topLeft,
@@ -67,11 +65,10 @@ export default function(evt) {
       ];
 
       if (this.configuration.drawHandles) {
-        drawHandles(context, eventData, handlesDraw, handleOptions);
+        drawHandles(context, eventData, handlesToDraw, handleOptions);
       }
 
-      // Draw Lines and Bezier Curve
-
+      // Draw Main Line
       lineOptions = {
         color: 'blue',
         lineWidth: 2,
@@ -79,7 +76,7 @@ export default function(evt) {
 
       drawLine(ctx, element, handles.left, handles.right, lineOptions);
 
-      //  Render Red Handles
+      //  Draw Control Handles
       lineOptions = {
         color: 'red',
         lineWidth: 2,
@@ -88,7 +85,7 @@ export default function(evt) {
       drawLine(ctx, element, handles.left, handles.topLeft, lineOptions);
       drawLine(ctx, element, handles.right, handles.topRight, lineOptions);
 
-      // Draw Curves and Lines
+      // Draw Bezier Curve
 
       let lineOptions = {
         color: 'coral',

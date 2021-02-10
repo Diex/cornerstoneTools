@@ -28,6 +28,7 @@ const pointNearTool = (
   return distanceToPoint < distanceThreshold;
 };
 
+// Point Near Tool
 export default function(element, data, coords, interactionType = 'mouse') {
   const cornerstone = external.cornerstone;
   const cornerstoneMath = external.cornerstoneMath;
@@ -39,8 +40,8 @@ export default function(element, data, coords, interactionType = 'mouse') {
   if (
     pointNearTool(
       element,
-      handles.blueCenter,
-      handles.blueLeft,
+      handles.left,
+      handles.right,
       coords,
       distanceThreshold
     )
@@ -51,8 +52,8 @@ export default function(element, data, coords, interactionType = 'mouse') {
   if (
     pointNearTool(
       element,
-      handles.blueCenter,
-      handles.blueRight,
+      handles.left,
+      handles.topLeft,
       coords,
       distanceThreshold
     )
@@ -63,56 +64,8 @@ export default function(element, data, coords, interactionType = 'mouse') {
   if (
     pointNearTool(
       element,
-      handles.blueCenter,
-      handles.blueTop,
-      coords,
-      distanceThreshold
-    )
-  ) {
-    return true;
-  }
-
-  if (
-    pointNearTool(
-      element,
-      handles.redTopCenter,
-      handles.redTopLeft,
-      coords,
-      distanceThreshold
-    )
-  ) {
-    return true;
-  }
-
-  if (
-    pointNearTool(
-      element,
-      handles.redTopCenter,
-      handles.redTopRight,
-      coords,
-      distanceThreshold
-    )
-  ) {
-    return true;
-  }
-
-  if (
-    pointNearTool(
-      element,
-      handles.redBottomCenter,
-      handles.redBottomLeft,
-      coords,
-      distanceThreshold
-    )
-  ) {
-    return true;
-  }
-
-  if (
-    pointNearTool(
-      element,
-      handles.redBottomCenter,
-      handles.redBottomRight,
+      handles.right,
+      handles.topRight,
       coords,
       distanceThreshold
     )

@@ -1,7 +1,7 @@
 import external from './../../../../externalModules.js';
 import { state } from '../../../../store/index.js';
 import EVENTS from './../../../../events.js';
-// import setHandlesPosition from './setHandlesPosition.js';
+import setHandlesPosition from './setHandlesPosition.js';
 import getActiveTool from '../../../../util/getActiveTool';
 import BaseAnnotationTool from '../../../base/BaseAnnotationTool';
 
@@ -23,18 +23,18 @@ export default function(
     const eventData = event.detail;
 
     handle.hasMoved = true;
-    handle.x = eventData.currentPoints.image.x + distanceFromTool.x;
-    handle.y = eventData.currentPoints.image.y + distanceFromTool.y;
+    // handle.x = eventData.currentPoints.image.x + distanceFromTool.x;
+    // handle.y = eventData.currentPoints.image.y + distanceFromTool.y;
     // if (handle.index === undefined || handle.index === null) {
 
-    handle.x = eventData.currentPoints.image.x + distanceFromTool.x;
-    handle.y = eventData.currentPoints.image.y + distanceFromTool.y;
-    // if (handle.index === undefined || handle.index === null) {
-    //   handle.x = eventData.currentPoints.image.x + distanceFromTool.x;
-    //   handle.y = eventData.currentPoints.image.y + distanceFromTool.y;
-    // } else {
-    //   // updateHandlesPosition(handle, eventData, data, distanceFromTool);
-    // }
+    // handle.x = eventData.currentPoints.image.x + distanceFromTool.x;
+    // handle.y = eventData.currentPoints.image.y + distanceFromTool.y;
+    if (handle.index === undefined || handle.index === null) {
+      handle.x = eventData.currentPoints.image.x + distanceFromTool.x;
+      handle.y = eventData.currentPoints.image.y + distanceFromTool.y;
+    } else {
+      setHandlesPosition(handle, eventData, data, distanceFromTool);
+    }
 
     if (preventHandleOutsideImage) {
       handle.x = Math.max(handle.x, 0);

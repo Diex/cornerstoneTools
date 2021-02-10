@@ -54,13 +54,10 @@ export default function(evt) {
     color: undefined,
     invalidated: true,
     handles: {
-      // start: getHandle(x, y, 'start'),
-      // end: getHandle(x, y, 'end'),
-
       center: getHandle(x, y),
       left: getHandle(x - handleDistance, y),
       right: getHandle(x + handleDistance, y),
-      top: getHandle(x, y - handleDistance),
+      // top: getHandle(x, y - handleDistance),
 
       topLeft: getHandle(x - topRedhandleDistanceX, y - topRedHandleDistanceY),
       topRight: getHandle(x + topRedhandleDistanceX, y - topRedHandleDistanceY),

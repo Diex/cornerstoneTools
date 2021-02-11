@@ -30,6 +30,7 @@ export default function(evt) {
   }
 
   const { data } = toolData;
+  console.log(data);
 
   // Calculate the data measurements
   if (data.invalidated === true) {

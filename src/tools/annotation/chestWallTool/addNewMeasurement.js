@@ -24,28 +24,22 @@ import triggerEvent from '../../../util/triggerEvent.js';
 const logger = getLogger('eventDispatchers:mouseEventHandlers');
 
 export default function(evt, interactionType) {
-  // esto me interesa...
-  // es el click del mouse
   const eventData = evt.detail;
-  console.log(evt.data);
-
   const { element, image, buttons } = eventData;
-
-  // console.log('ChestWallTool:addNewMeasurement:', this.name);
 
   evt.preventDefault();
   evt.stopPropagation();
 
-  const toolData = getToolState(evt.currentTarget, this.name);
+  // 'this' es la extension ChestWallTool.js
+  const toolState = getToolState(evt.currentTarget, this.name);
 
   // moved from createNewMeasure
   // This avoids to create multiple tool handlers at the same time
-  if (toolData && toolData.data && toolData.data.length) {
+  if (toolState && toolState.data && toolState.data.length) {
+    console.log('ChestWallTool:toolState:', toolState);
     return;
   }
 
-  // const eventData = evt.detail;
-  // const element = eventData.element;
   // aca cambia porque le mandamos el evt completo
   const measurementData = this.createNewMeasurement(evt);
 
@@ -59,17 +53,8 @@ export default function(evt, interactionType) {
   addToolState(element, this.name, measurementData);
   external.cornerstone.updateImage(element);
 
-  // const handleMover =
-  //   Object.keys(measurementData.handles).length === 1
-  //     ? moveHandle
-  //     : moveNewHandle;
-
-  // agarra la tool y mueve (el ndale que le dpaso)
-  // const doneCallback = () => {
-  //   measurementData.active = false;
-  //   external.cornerstone.updateImage(element);
-  // };
-
+  // todo esto no tiene sentido...
+  /*
   moveHandle(
     eventData,
     this.name,
@@ -106,4 +91,5 @@ export default function(evt, interactionType) {
       }
     }
   );
+  */
 }

@@ -29,7 +29,7 @@ const getHandle = (x, y, name, extraAttributes = {}) => {
 };
 
 export default function(evt) {
-  console.log('ChestWallTool:createNewMeasurement(evt)', evt);
+  // console.log('ChestWallTool:createNewMeasurement(evt)', evt);
 
   const eventData = evt.detail;
 
@@ -40,7 +40,6 @@ export default function(evt) {
     logger.error(
       `required eventData not supplied to tool ${this.name}'s createNewMeasurement`
     );
-
     return;
   }
 
@@ -53,50 +52,14 @@ export default function(evt) {
     active: true,
     color: undefined,
     invalidated: true,
+
     handles: {
       center: getHandle(x, y),
       left: getHandle(x - handleDistance, y),
       right: getHandle(x + handleDistance, y),
-      // top: getHandle(x, y - handleDistance),
 
       topLeft: getHandle(x - topRedhandleDistanceX, y - topRedHandleDistanceY),
       topRight: getHandle(x + topRedhandleDistanceX, y - topRedHandleDistanceY),
-
-      // Blue Handles
-      // blueCenter: getHandle(x, y),
-      // blueLeft: getHandle(x - handleDistance, y),
-      // blueRight: getHandle(x + handleDistance, y),
-      // blueTop: getHandle(x, y - handleDistance),
-
-      // Red Handles
-      // redTopCenter: getHandle(x, y - topRedHandleDistanceY),
-      // redTopLeft: getHandle(
-      //   x - topRedhandleDistanceX,
-      //   y - topRedHandleDistanceY
-      // ),
-      // redTopRight: getHandle(
-      //   x + topRedhandleDistanceX,
-      //   y - topRedHandleDistanceY
-      // ),
-
-      // redBottomCenter: getHandle(x, y - bottomRedhandleDistanceY),
-      // redBottomLeft: getHandle(
-      //   x - bottomRedhandleDistanceX,
-      //   y - bottomRedhandleDistanceY
-      // ),
-      // redBottomRight: getHandle(
-      //   x + bottomRedhandleDistanceX,
-      //   y - bottomRedhandleDistanceY
-      // ),
-      // textBox: getHandle(x - 50, y - 70, {
-      //   highlight: false,
-      //   hasMoved: true,
-      //   active: false,
-      //   movesIndependently: false,
-      //   drawnIndependently: true,
-      //   allowedOutsideImage: true,
-      //   hasBoundingBox: true,
-      // }),
     },
   };
 }

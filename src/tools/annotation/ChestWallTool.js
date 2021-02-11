@@ -12,9 +12,8 @@ import updateCachedStats from './chestWallTool/updateCachedStats';
 import handleSelectedCallback from './chestWallTool/handleSelectedCallback.js';
 import handleSelectedMouseCallback from './chestWallTool/handleSelectedMouseCallback.js';
 import handleSelectedTouchCallback from './chestWallTool/handleSelectedTouchCallback.js';
-import getPixelSpacing from '../../util/getPixelSpacing';
-import calculateLongestAndShortestDiameters from './bidirectionalTool/utils/calculateLongestAndShortestDiameters';
 
+// const logger = getLogger('tools:annotation:ChestWallTool');
 const emptyLocationCallback = (measurementData, eventData, doneCallback) =>
   doneCallback();
 
@@ -32,28 +31,28 @@ export default class ChestWallTool extends BaseAnnotationTool {
       name: 'ChestWall',
       supportedInteractionTypes: ['Mouse', 'Touch'],
       configuration: {
-        // changeMeasurementLocationCallback: emptyLocationCallback,
-        // getMeasurementLocationCallback: emptyLocationCallback,
+        changeMeasurementLocationCallback: emptyLocationCallback,
+        getMeasurementLocationCallback: emptyLocationCallback,
         drawHandles: true,
         drawHandlesOnHover: false,
-        hideHandlesIfMoving: false,
+        hideHandlesIfMoving: true,
         renderDashed: false,
-        additionalData: [],
       },
       svgCursor: lengthCursor,
     };
 
     super(props, defaultProps);
-    // todos los anotations tools tienen que definier estas funciones
-    // addNewMeasurment se ejecuta cuando activo la tool y llama a createNewMeasurment
+    // todos los anotations tools tienen que definier estas funcinoes
+    // addNewMeasurmente se ejecuta cuando activo la tool
+    // addNewMeasurement es quien llama a createNewMeasurment
     this.addNewMeasurement = addNewMeasurement.bind(this);
+
     this.createNewMeasurement = createNewMeasurement.bind(this);
-
     this.pointNearTool = pointNearTool.bind(this);
-
     this.renderToolData = renderToolData.bind(this);
 
     // estas esta custom para los dibujos que tenemos que hacer.
+
     this.handleSelectedCallback = handleSelectedCallback.bind(this);
     this.handleSelectedMouseCallback = handleSelectedMouseCallback.bind(this);
     this.handleSelectedTouchCallback = handleSelectedTouchCallback.bind(this);
@@ -64,27 +63,8 @@ export default class ChestWallTool extends BaseAnnotationTool {
     // Mode Callbacks: (element, options)
     // this.enabledCallback = this._createMagnificationCanvas.bind(this);
     // this.disabledCallback = this._destroyMagnificationCanvas.bind(this);
+
     // this.postTouchStartCallback = this._postTouchStartCallback.bind(this);
     // this.postMouseDownCallback = this._postMouseDownCallback.bind(this);
-  }
-
-  updateCachedStats(image, element, data) {
-    // Prevent updating other tools' data
-    console.log(image, element, data);
-    console.log(this.name);
-    if (data.toolName !== this.name) {
-      return;
-    }
-    console.log(image, element, data);
-    const pixelSpacing = getPixelSpacing(image);
-    const {
-      longestDiameter,
-      shortestDiameter,
-    } = calculateLongestAndShortestDiameters(data, pixelSpacing);
-
-    // Set measurement text to show lesion table
-    data.longestDiameter = longestDiameter;
-    data.shortestDiameter = shortestDiameter;
-    data.invalidated = false;
   }
 }

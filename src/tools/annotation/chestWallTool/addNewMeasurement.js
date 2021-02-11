@@ -21,32 +21,39 @@ import { moveHandle, moveNewHandle } from './../../../manipulators/index.js';
 import { getLogger } from '../../../util/logger.js';
 import triggerEvent from '../../../util/triggerEvent.js';
 
-// import * as sbp from 'svg-blueprint';
-
 const logger = getLogger('eventDispatchers:mouseEventHandlers');
 
 export default function(evt, interactionType) {
+  // esto me interesa...
+  // es el click del mouse
   const eventData = evt.detail;
+  console.log(evt.data);
+
   const { element, image, buttons } = eventData;
 
-  const config = this.configuration;
+  // console.log('ChestWallTool:addNewMeasurement:', this.name);
 
-  if (checkPixelSpacing(image)) {
-    return;
-  }
+  evt.preventDefault();
+  evt.stopPropagation();
 
-  // evt.preventDefault();
-  // evt.stopPropagation();
+  const toolData = getToolState(evt.currentTarget, this.name);
 
   // moved from createNewMeasure
   // This avoids to create multiple tool handlers at the same time
-  const toolData = getToolState(evt.currentTarget, this.name);
   if (toolData && toolData.data && toolData.data.length) {
     return;
   }
 
-  // retro as seen on bidirectionalTool
-  const measurementData = this.createNewMeasurement(eventData);
+  // const eventData = evt.detail;
+  // const element = eventData.element;
+  // aca cambia porque le mandamos el evt completo
+  const measurementData = this.createNewMeasurement(evt);
+
+  console.log('ChestWallTool:measurementData:', measurementData);
+
+  if (!measurementData) {
+    return;
+  }
 
   // Associate this data with this imageId so we can render it and manipulate it
   addToolState(element, this.name, measurementData);
@@ -57,27 +64,26 @@ export default function(evt, interactionType) {
   //     ? moveHandle
   //     : moveNewHandle;
 
-  const timestamp = new Date().getTime();
-  const { blueCenter } = measurementData.handles;
   // agarra la tool y mueve (el ndale que le dpaso)
-  const doneCallback = () => {
-    measurementData.active = false;
-    external.cornerstone.updateImage(element);
-  };
+  // const doneCallback = () => {
+  //   measurementData.active = false;
+  //   external.cornerstone.updateImage(element);
+  // };
 
   moveHandle(
     eventData,
     this.name,
     measurementData,
-    blueCenter,
+    measurementData.handles.center,
     {}, // this.options,
     interactionType, // 'mouse',
     success => {
       // ver esto...
-      if (!success) {
-        removeToolState(element, this.name, measurementData);
-        return;
-      }
+      // if (!success) {
+      //   removeToolState(element, this.name, measurementData);
+      //   return;
+      // }
+
       if (measurementData.cancelled) {
         return;
       }
@@ -93,8 +99,6 @@ export default function(evt, interactionType) {
         measurementData.active = false;
         external.cornerstone.updateImage(element);
         // triggerEvent(element, eventType, eventData);
-        console.log('modifiedData:');
-        console.log(eventData);
         triggerEvent(element, EVENTS.MEASUREMENT_MODIFIED, eventData);
         triggerEvent(element, EVENTS.MEASUREMENT_COMPLETED, eventData);
       } else {
@@ -103,22 +107,3 @@ export default function(evt, interactionType) {
     }
   );
 }
-
-const checkPixelSpacing = image => {
-  const imagePlane = external.cornerstone.metaData.get(
-    'imagePlaneModule',
-    image.imageId
-  );
-  let rowPixelSpacing = image.rowPixelSpacing;
-  let colPixelSpacing = image.columnPixelSpacing;
-
-  if (imagePlane) {
-    rowPixelSpacing =
-      imagePlane.rowPixelSpacing || imagePlane.rowImagePixelSpacing;
-    colPixelSpacing =
-      imagePlane.columnPixelSpacing || imagePlane.colImagePixelSpacing;
-  }
-
-  // LT-29 Disable Target Measurements when pixel spacing is not available
-  return !rowPixelSpacing || !colPixelSpacing;
-};

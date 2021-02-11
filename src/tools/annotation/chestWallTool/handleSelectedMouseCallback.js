@@ -63,7 +63,6 @@ export default function(evt) {
 
       unselectAllHandles(data.handles);
       handle.moving = true;
-
       // Invert handles if needed
       // handle = invertHandles(eventData, data, handle);
 

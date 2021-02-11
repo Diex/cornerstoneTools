@@ -13,7 +13,7 @@ import { moveAllHandles } from './../../../manipulators/index.js';
 import touchMoveHandle from './moveHandle/touchMoveHandle.js';
 
 export default function(evt) {
-  console.log('ChestWallTool.handleSelectedTouchCallback');
+  // console.log('ChestWallTool.handleSelectedTouchCallback');
   const eventData = evt.detail;
   const { element } = eventData;
   let data;

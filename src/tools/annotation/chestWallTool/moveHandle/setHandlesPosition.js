@@ -12,13 +12,23 @@ export default function(handle, eventData, data, distanceFromTool) {
 
   let connectedHandle;
 
-  if (handle.index === 1) {
+  console.log(handle);
+
+  if (handle.name === 'origin') {
+    // console.log(handles);
+    for (let element in handles) {
+      console.log(element);
+      handles[element].x += diffX;
+      handles[element].y += diffY;
+    }
+  }
+
+  if (handle.name === 'right') {
     // Left handle selected
     connectedHandle = handles.right;
-
     connectedHandle.x -= diffX;
     connectedHandle.y += diffY;
-  } else if (handle.index === 2) {
+  } else if (handle.name === 'left') {
     // Right handle selected
     connectedHandle = handles.left;
 

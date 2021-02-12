@@ -52,17 +52,19 @@ export default function(evt) {
 
       // Draw Handles
       const handleOptions = {
-        color: 'blue',
+        color: 'white',
         handleRadius: 10,
         drawHandlesIfActive: this.configuration.drawHandlesOnHover,
         hideHandlesIfMoving: this.configuration.hideHandlesIfMoving,
       };
 
       const handlesToDraw = [
+        handles.origin,
+        handles.top,
         handles.left,
         handles.right,
-        handles.topLeft,
-        handles.topRight,
+        handles.controlLeft,
+        handles.controlRight,
       ];
 
       if (this.configuration.drawHandles) {
@@ -71,11 +73,13 @@ export default function(evt) {
 
       // Draw Main Line
       lineOptions = {
-        color: 'blue',
+        color: 'yellow',
         lineWidth: 2,
       };
 
-      drawLine(ctx, element, handles.left, handles.right, lineOptions);
+      drawLine(ctx, element, handles.left, handles.origin, lineOptions);
+      drawLine(ctx, element, handles.right, handles.origin, lineOptions);
+      drawLine(ctx, element, handles.origin, handles.top, lineOptions);
 
       //  Draw Control Handles
       lineOptions = {
@@ -83,23 +87,37 @@ export default function(evt) {
         lineWidth: 2,
       };
 
-      drawLine(ctx, element, handles.left, handles.topLeft, lineOptions);
-      drawLine(ctx, element, handles.right, handles.topRight, lineOptions);
+      // drawLine(ctx, element, handles.left, handles.topLeft, lineOptions);
+      // drawLine(ctx, element, handles.right, handles.topRight, lineOptions);
 
       // Draw Bezier Curve
 
       let lineOptions = {
-        color: 'coral',
-        lineWidth: 10,
+        color: 'white',
+        lineWidth: 1,
       };
 
+      // start,
+      // controlPointStart,
+      // controlPointEnd,
+      // end,
       drawBezierCurve(
         ctx,
         element,
         handles.left,
-        handles.topLeft,
-        handles.topRight,
+        handles.controlLeft,
+        handles.controlLeft,
+        handles.top,
+        lineOptions
+      );
+
+      drawBezierCurve(
+        ctx,
+        element,
         handles.right,
+        handles.controlRight,
+        handles.controlRight,
+        handles.top,
         lineOptions
       );
     }

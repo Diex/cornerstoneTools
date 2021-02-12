@@ -54,12 +54,22 @@ export default function(evt) {
     invalidated: true,
 
     handles: {
-      center: getHandle(x, y),
-      left: getHandle(x - handleDistance, y),
-      right: getHandle(x + handleDistance, y),
+      origin: getHandle(x, y, 'origin'),
+      top: getHandle(x, y - handleDistance, 'top'),
 
-      topLeft: getHandle(x - topRedhandleDistanceX, y - topRedHandleDistanceY),
-      topRight: getHandle(x + topRedhandleDistanceX, y - topRedHandleDistanceY),
+      left: getHandle(x - handleDistance, y, 'left'),
+      right: getHandle(x + handleDistance, y, 'right'),
+
+      controlLeft: getHandle(
+        x - topRedhandleDistanceX,
+        y - topRedHandleDistanceY,
+        'controlLeft'
+      ),
+      controlRight: getHandle(
+        x + topRedhandleDistanceX,
+        y - topRedHandleDistanceY,
+        'controlRight'
+      ),
     },
   };
 }

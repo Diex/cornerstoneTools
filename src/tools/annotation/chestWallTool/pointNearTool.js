@@ -53,7 +53,7 @@ export default function(element, data, coords, interactionType = 'mouse') {
     pointNearTool(
       element,
       handles.left,
-      handles.topLeft,
+      handles.controlLeft,
       coords,
       distanceThreshold
     )
@@ -65,7 +65,7 @@ export default function(element, data, coords, interactionType = 'mouse') {
     pointNearTool(
       element,
       handles.right,
-      handles.topRight,
+      handles.controlRight,
       coords,
       distanceThreshold
     )

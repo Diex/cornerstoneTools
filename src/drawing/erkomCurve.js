@@ -58,7 +58,7 @@ export default function erkomCurve(
     const neworigin = external.cornerstone.pixelToCanvas(element, origin);
     let oh = new Victor(neworigin.x, neworigin.y);
 
-    console.log(oh);
+    // console.log(oh);
     points = [];
     if (coordSystem === 'pixel') {
       for (let point of pts) {
@@ -80,7 +80,7 @@ export default function erkomCurve(
     // console.log(points);
 
     // move to the first point
-    console.log(points);
+    // console.log(points);
     context.moveTo(points[0].x, points[0].y);
     for (i = 1; i < points.length - 2; i++) {
       var xc = (points[i].x + points[i + 1].x) / 2;
@@ -94,5 +94,13 @@ export default function erkomCurve(
       points[i + 1].x,
       points[i + 1].y
     );
+
+    context.moveTo(points[0].x, points[0].y);
+    const a = external.cornerstone.pixelToCanvas(element, pts[0]);
+    context.lineTo(a.x, a.y);
+
+    context.moveTo(points[points.length - 1].x, points[points.length - 1].y);
+    const b = external.cornerstone.pixelToCanvas(element, pts[pts.length - 1]);
+    context.lineTo(b.x, b.y);
   });
 }

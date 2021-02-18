@@ -8,7 +8,7 @@ import {
   draw,
   setShadow,
   drawLine,
-  drawBezierCurve,
+  erkomCurve,
 } from './../../../drawing/index.js';
 import drawHandles from './../../../drawing/drawHandles.js';
 
@@ -59,12 +59,12 @@ export default function(evt) {
       };
 
       const handlesToDraw = [
-        handles.origin,
-        handles.top,
         handles.left,
-        handles.right,
         handles.controlLeft,
+        // handles.origin,
+        handles.top,
         handles.controlRight,
+        handles.right,
       ];
 
       if (this.configuration.drawHandles) {
@@ -97,29 +97,30 @@ export default function(evt) {
         lineWidth: 1,
       };
 
+      erkomCurve(ctx, element, handlesToDraw, lineOptions);
       // start,
       // controlPointStart,
       // controlPointEnd,
       // end,
-      drawBezierCurve(
-        ctx,
-        element,
-        handles.left,
-        handles.controlLeft,
-        handles.controlLeft,
-        handles.top,
-        lineOptions
-      );
+      // drawBezierCurve(
+      //   ctx,
+      //   element,
+      //   handles.left,
+      //   handles.controlLeft,
+      //   handles.controlLeft,
+      //   handles.top,
+      //   lineOptions
+      // );
 
-      drawBezierCurve(
-        ctx,
-        element,
-        handles.right,
-        handles.controlRight,
-        handles.controlRight,
-        handles.top,
-        lineOptions
-      );
+      // drawBezierCurve(
+      //   ctx,
+      //   element,
+      //   handles.right,
+      //   handles.controlRight,
+      //   handles.controlRight,
+      //   handles.top,
+      //   lineOptions
+      // );
     }
   });
 }

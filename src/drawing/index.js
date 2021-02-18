@@ -34,7 +34,7 @@ import path from './path.js';
 import setShadow from './setShadow.js';
 import transformCanvasContext from './transformCanvasContext.js';
 import resetCanvasContextTransform from './resetCanvasContextTransform.js';
-
+import erkomCurve from './erkomCurve.js';
 // Named exports
 export {
   draw,
@@ -58,4 +58,5 @@ export {
   setShadow,
   transformCanvasContext,
   resetCanvasContextTransform,
+  erkomCurve,
 };

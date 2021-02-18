@@ -4,11 +4,12 @@ const logger = getLogger('tools:annotation:ChestWallTool');
 let index = -1;
 
 const handleDistance = 200;
-const topRedhandleDistanceX = handleDistance * 0.6; // set line length to 60%
-const topRedHandleDistanceY = handleDistance * 0.66;
 
-const bottomRedhandleDistanceX = handleDistance * 0.8; //  set line length to 80%
-const bottomRedhandleDistanceY = handleDistance * 0.33;
+const topHandleX = handleDistance * 0.6; // set line length to 60%
+const topHandleY = handleDistance * 0.8;
+
+const bottomHandleX = handleDistance * 0.8; //  set line length to 80%
+const bottomHandleY = handleDistance * 0.4;
 
 const getHandle = (x, y, name, extraAttributes = {}) => {
   index++;
@@ -56,20 +57,16 @@ export default function(evt) {
     handles: {
       origin: getHandle(x, y, 'origin'),
       top: getHandle(x, y - handleDistance, 'top'),
-
       left: getHandle(x - handleDistance, y, 'left'),
       right: getHandle(x + handleDistance, y, 'right'),
-
-      controlLeft: getHandle(
-        x - topRedhandleDistanceX,
-        y - topRedHandleDistanceY,
-        'controlLeft'
+      bottomLeft: getHandle(x - bottomHandleX, y - bottomHandleY, 'bottomLeft'),
+      topLeft: getHandle(x - topHandleX, y - topHandleY, 'topLeft'),
+      bottomRight: getHandle(
+        x + bottomHandleX,
+        y - bottomHandleY,
+        'bottomRigth'
       ),
-      controlRight: getHandle(
-        x + topRedhandleDistanceX,
-        y - topRedHandleDistanceY,
-        'controlRight'
-      ),
+      topRight: getHandle(x + topHandleX, y - topHandleY, 'topRight'),
     },
   };
 }

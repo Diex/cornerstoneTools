@@ -1,6 +1,6 @@
 import external from '../externalModules.js';
 import path from './path.js';
-
+var Victor = require('victor');
 /**
  * Draw a line between `start` and `end`.
  *
@@ -22,33 +22,24 @@ export default function erkomCurve(
   context,
   element,
   pts,
+  origin,
   options,
   coordSystem = 'pixel'
 ) {
   path(context, options, context => {
     let points = [];
-    if (coordSystem === 'pixel') {
-      // start = external.cornerstone.pixelToCanvas(element, start);
-      // controlPointStart = external.cornerstone.pixelToCanvas(
-      //   element,
-      //   controlPointStart
-      // );
-      // controlPointEnd = external.cornerstone.pixelToCanvas(
-      //   element,
-      //   controlPointEnd
-      // );
-      // end = external.cornerstone.pixelToCanvas(element, end);
 
+    if (coordSystem === 'pixel') {
       for (let point of pts) {
         points.push(external.cornerstone.pixelToCanvas(element, point));
       }
-      console.log(points);
     }
 
     let i;
+
+    // outer path
     // move to the first point
     context.moveTo(points[0].x, points[0].y);
-
     for (i = 1; i < points.length - 2; i++) {
       var xc = (points[i].x + points[i + 1].x) / 2;
       var yc = (points[i].y + points[i + 1].y) / 2;
@@ -62,14 +53,46 @@ export default function erkomCurve(
       points[i + 1].y
     );
 
-    //   context.moveTo(start.x, start.y);
-    //   context.bezierCurveTo(
-    //     controlPointStart.x,
-    //     controlPointStart.y,
-    //     controlPointEnd.x,
-    //     controlPointEnd.y,
-    //     end.x,
-    //     end.y
-    //   );
+    // inner path
+    let width = 20;
+    const neworigin = external.cornerstone.pixelToCanvas(element, origin);
+    let oh = new Victor(neworigin.x, neworigin.y);
+
+    console.log(oh);
+    points = [];
+    if (coordSystem === 'pixel') {
+      for (let point of pts) {
+        const a = external.cornerstone.pixelToCanvas(element, point);
+
+        // direction
+        const av = new Victor(a.x, a.y);
+        const ref = av
+          .subtract(oh)
+          .normalize()
+          .multiplyScalar(width); //.normalize(); // pointing origin
+
+        const to = new Victor(a.x, a.y).add(ref);
+
+        points.push(to);
+      }
+    }
+
+    // console.log(points);
+
+    // move to the first point
+    console.log(points);
+    context.moveTo(points[0].x, points[0].y);
+    for (i = 1; i < points.length - 2; i++) {
+      var xc = (points[i].x + points[i + 1].x) / 2;
+      var yc = (points[i].y + points[i + 1].y) / 2;
+      context.quadraticCurveTo(points[i].x, points[i].y, xc, yc);
+    }
+    // curve through the last two points
+    context.quadraticCurveTo(
+      points[i].x,
+      points[i].y,
+      points[i + 1].x,
+      points[i + 1].y
+    );
   });
 }

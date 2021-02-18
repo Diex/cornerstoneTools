@@ -49,29 +49,29 @@ export default function(element, data, coords, interactionType = 'mouse') {
     return true;
   }
 
-  if (
-    pointNearTool(
-      element,
-      handles.left,
-      handles.controlLeft,
-      coords,
-      distanceThreshold
-    )
-  ) {
-    return true;
-  }
+  // if (
+  //   pointNearTool(
+  //     element,
+  //     handles.left,
+  //     handles.controlLeft,
+  //     coords,
+  //     distanceThreshold
+  //   )
+  // ) {
+  //   return true;
+  // }
 
-  if (
-    pointNearTool(
-      element,
-      handles.right,
-      handles.controlRight,
-      coords,
-      distanceThreshold
-    )
-  ) {
-    return true;
-  }
+  // if (
+  //   pointNearTool(
+  //     element,
+  //     handles.right,
+  //     handles.controlRight,
+  //     coords,
+  //     distanceThreshold
+  //   )
+  // ) {
+  //   return true;
+  // }
 
   // If textbox is added, we should check it using this function
   // if (pointInsideBoundingBox(handles.textBox, coords)) {

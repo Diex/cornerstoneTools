@@ -60,16 +60,20 @@ export default function(evt) {
 
       const handlesToDraw = [
         handles.left,
-        handles.controlLeft,
+        handles.bottomLeft,
+        handles.topLeft,
         // handles.origin,
         handles.top,
-        handles.controlRight,
+        handles.topRight,
+        handles.bottomRight,
         handles.right,
       ];
 
       if (this.configuration.drawHandles) {
         drawHandles(context, eventData, handlesToDraw, handleOptions);
       }
+
+      drawHandles(context, eventData, handles.origin, handleOptions);
 
       // Draw Main Line
       lineOptions = {
@@ -82,10 +86,10 @@ export default function(evt) {
       drawLine(ctx, element, handles.origin, handles.top, lineOptions);
 
       //  Draw Control Handles
-      lineOptions = {
-        color: 'red',
-        lineWidth: 2,
-      };
+      // lineOptions = {
+      //   color: 'red',
+      //   lineWidth: 2,
+      // };
 
       // drawLine(ctx, element, handles.left, handles.topLeft, lineOptions);
       // drawLine(ctx, element, handles.right, handles.topRight, lineOptions);
@@ -97,30 +101,7 @@ export default function(evt) {
         lineWidth: 1,
       };
 
-      erkomCurve(ctx, element, handlesToDraw, lineOptions);
-      // start,
-      // controlPointStart,
-      // controlPointEnd,
-      // end,
-      // drawBezierCurve(
-      //   ctx,
-      //   element,
-      //   handles.left,
-      //   handles.controlLeft,
-      //   handles.controlLeft,
-      //   handles.top,
-      //   lineOptions
-      // );
-
-      // drawBezierCurve(
-      //   ctx,
-      //   element,
-      //   handles.right,
-      //   handles.controlRight,
-      //   handles.controlRight,
-      //   handles.top,
-      //   lineOptions
-      // );
+      erkomCurve(ctx, element, handlesToDraw, handles.origin, lineOptions);
     }
   });
 }

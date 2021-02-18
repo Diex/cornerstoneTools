@@ -12,12 +12,12 @@ export default function(handle, eventData, data, distanceFromTool) {
 
   let connectedHandle;
 
-  console.log(handle);
+  // console.log(handle);
 
   if (handle.name === 'origin') {
     // console.log(handles);
     for (let element in handles) {
-      console.log(element);
+      // console.log(element);
       handles[element].x += diffX;
       handles[element].y += diffY;
     }

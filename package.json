@@ -93,7 +93,8 @@
     "cornerstone-math": "0.1.7",
     "makerjs": "^0.17.0",
     "makerjs-half-band-clamp": "^1.0.0",
-    "svg-blueprint": "^1.0.1"
+    "svg-blueprint": "^1.0.1",
+    "victor": "^1.1.0"
   },
   "files": [
     "dist/cornerstoneTools.js",

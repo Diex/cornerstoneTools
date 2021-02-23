@@ -36,7 +36,6 @@ export default function erkomCurve(
     }
 
     let i;
-
     // outer path
     // move to the first point
     context.moveTo(points[0].x, points[0].y);

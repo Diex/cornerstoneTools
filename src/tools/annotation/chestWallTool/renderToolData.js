@@ -102,6 +102,8 @@ export default function(evt) {
       };
 
       erkomCurve(ctx, element, handlesToDraw, handles.origin, lineOptions);
+
+      // erkomCurve(svg, element, handlesToDraw, handles.origin, lineOptions);
     }
   });
 }

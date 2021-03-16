@@ -6,11 +6,13 @@ import { getToolState } from './../../../stateManagement/toolState.js';
 import {
   getNewContext,
   draw,
-  setShadow,
   drawLine,
   erkomCurve,
 } from './../../../drawing/index.js';
 import drawHandles from './../../../drawing/drawHandles.js';
+
+// Won't work using es6 import...
+const Canvas2Svg = require('./canvas2svg');
 
 export default function(evt) {
   const eventData = evt.detail;
@@ -24,13 +26,15 @@ export default function(evt) {
   const width = canvas.width;
   const height = canvas.height;
 
+  // SVG Context
+  const contextSVG = new window.C2S(width, height);
+
   // Check if there's any measurement data to render to continue
   if (!toolData || !toolData.data) {
     return;
   }
 
   const { data } = toolData;
-  console.log(data);
 
   // Calculate the data measurements
   if (data.invalidated === true) {
@@ -62,7 +66,6 @@ export default function(evt) {
         handles.left,
         handles.bottomLeft,
         handles.topLeft,
-        // handles.origin,
         handles.top,
         handles.topRight,
         handles.bottomRight,
@@ -74,6 +77,7 @@ export default function(evt) {
       }
 
       drawHandles(context, eventData, handles.origin, handleOptions);
+      drawHandles(contextSVG, eventData, handles.origin, handleOptions);
 
       // Draw Main Line
       lineOptions = {
@@ -82,28 +86,29 @@ export default function(evt) {
       };
 
       drawLine(ctx, element, handles.left, handles.origin, lineOptions);
+      drawLine(contextSVG, element, handles.left, handles.origin, lineOptions);
       drawLine(ctx, element, handles.right, handles.origin, lineOptions);
+      drawLine(contextSVG, element, handles.right, handles.origin, lineOptions);
       drawLine(ctx, element, handles.origin, handles.top, lineOptions);
-
-      //  Draw Control Handles
-      // lineOptions = {
-      //   color: 'red',
-      //   lineWidth: 2,
-      // };
-
-      // drawLine(ctx, element, handles.left, handles.topLeft, lineOptions);
-      // drawLine(ctx, element, handles.right, handles.topRight, lineOptions);
+      drawLine(contextSVG, element, handles.origin, handles.top, lineOptions);
 
       // Draw Bezier Curve
 
       let lineOptions = {
-        color: 'white',
+        color: 'red',
         lineWidth: 1,
       };
 
       erkomCurve(ctx, element, handlesToDraw, handles.origin, lineOptions);
+      erkomCurve(
+        contextSVG,
+        element,
+        handlesToDraw,
+        handles.origin,
+        lineOptions
+      );
 
-      // erkomCurve(svg, element, handlesToDraw, handles.origin, lineOptions);
+      window.chestWallToolSVG = contextSVG.getSerializedSvg(true);
     }
   });
 }

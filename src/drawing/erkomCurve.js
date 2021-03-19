@@ -34,6 +34,11 @@ export default function erkomCurve(
       for (let point of pts) {
         points.push(external.cornerstone.pixelToCanvas(element, point));
       }
+    } else {
+      // TODO: el svg sale a escala real
+      for (let point of pts) {
+        points.push(external.cornerstone.pixelToCanvas(element, point));
+      }
     }
 
     let i;

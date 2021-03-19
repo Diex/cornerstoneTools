@@ -1,4 +1,6 @@
 import { getLogger } from '../../../util/logger.js';
+import { paper } from 'paper';
+import external from './../../../externalModules.js';
 
 const logger = getLogger('tools:annotation:ChestWallTool');
 let index = -1;
@@ -43,6 +45,14 @@ export default function(evt) {
     );
     return;
   }
+  const canvas = evt.detail.element.querySelector('canvas.cornerstone-canvas');
+
+  // Get a reference to the canvas object
+  // var canvas = document.getElementById('myCanvas');
+  // Create an empty project and a view for the canvas:
+  paper.setup(canvas);
+  paper.view.autoUpdate = false;
+  // paper.view.re
 
   const { x, y } = eventData.currentPoints.image;
 

@@ -1,7 +1,8 @@
 /*
  * ChestWallTool.renderToolData(event)
  */
-
+import { paper } from 'paper';
+import external from './../../../externalModules.js';
 import { getToolState } from './../../../stateManagement/toolState.js';
 import {
   getNewContext,
@@ -72,12 +73,40 @@ export default function(evt) {
         handles.right,
       ];
 
+      paper.view.viewSize = new paper.Size(width, height);
+      // paper.view.context.fillStyle = '#00000000';
+
+      console.log(paper.view);
+      // Create a new layer and activate it:
+
+      var secondLayer = new paper.Layer();
+
+      console.log(secondLayer.hasFill());
+      // paper.view.element
+      //   .getContext('2d')
+      //   .clearRect(0, 0, paper.view.element.width, paper.view.element.height);
+
+      var path = new paper.Path.Circle({
+        center: [80, 50],
+        radius: 35,
+        fillColor: 'red',
+      });
+
+      // var secondPath = new paper.Path.Circle({
+      //   center: [120, 50],
+      //   radius: 35,
+      //   fillColor: '#00FF00',
+      // });
+
+      paper.view.update();
+
+      // secondLayer.visible = false;
       if (this.configuration.drawHandles) {
         drawHandles(context, eventData, handlesToDraw, handleOptions);
       }
 
       drawHandles(context, eventData, handles.origin, handleOptions);
-      drawHandles(contextSVG, eventData, handles.origin, handleOptions);
+      // drawHandles(contextSVG, eventData, handles.origin, handleOptions);
 
       // Draw Main Line
       lineOptions = {
@@ -86,11 +115,11 @@ export default function(evt) {
       };
 
       drawLine(ctx, element, handles.left, handles.origin, lineOptions);
-      drawLine(contextSVG, element, handles.left, handles.origin, lineOptions);
+      // drawLine(contextSVG, element, handles.left, handles.origin, lineOptions);
       drawLine(ctx, element, handles.right, handles.origin, lineOptions);
-      drawLine(contextSVG, element, handles.right, handles.origin, lineOptions);
+      // drawLine(contextSVG, element, handles.right, handles.origin, lineOptions);
       drawLine(ctx, element, handles.origin, handles.top, lineOptions);
-      drawLine(contextSVG, element, handles.origin, handles.top, lineOptions);
+      // drawLine(contextSVG, element, handles.origin, handles.top, lineOptions);
 
       // Draw Bezier Curve
 
@@ -100,13 +129,15 @@ export default function(evt) {
       };
 
       erkomCurve(ctx, element, handlesToDraw, handles.origin, lineOptions);
-      erkomCurve(
-        contextSVG,
-        element,
-        handlesToDraw,
-        handles.origin,
-        lineOptions
-      );
+
+      // erkomCurve(
+      //   contextSVG,
+      //   element,
+      //   handlesToDraw,
+      //   handles.origin,
+      //   lineOptions,
+      //   ''
+      // );
 
       window.chestWallToolSVG = contextSVG.getSerializedSvg(true);
     }

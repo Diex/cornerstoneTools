@@ -1,5 +1,6 @@
 import external from '../externalModules.js';
 import path from './path.js';
+
 var Victor = require('victor');
 /**
  * Draw a line between `start` and `end`.
@@ -82,8 +83,8 @@ export default function erkomCurve(
     // console.log(points);
     context.moveTo(points[0].x, points[0].y);
     for (i = 1; i < points.length - 2; i++) {
-      var xc = (points[i].x + points[i + 1].x) / 2;
-      var yc = (points[i].y + points[i + 1].y) / 2;
+      let xc = (points[i].x + points[i + 1].x) / 2;
+      let yc = (points[i].y + points[i + 1].y) / 2;
       context.quadraticCurveTo(points[i].x, points[i].y, xc, yc);
     }
     // curve through the last two points
@@ -101,5 +102,8 @@ export default function erkomCurve(
     context.moveTo(points[points.length - 1].x, points[points.length - 1].y);
     const b = external.cornerstone.pixelToCanvas(element, pts[pts.length - 1]);
     context.lineTo(b.x, b.y);
+
+    //  render to svg
+    //  exportar a pdf con tamaño 1 a 1
   });
 }

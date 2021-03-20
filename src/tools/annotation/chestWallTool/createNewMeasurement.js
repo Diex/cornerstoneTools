@@ -50,7 +50,10 @@ export default function(evt) {
   // Get a reference to the canvas object
   // var canvas = document.getElementById('myCanvas');
   // Create an empty project and a view for the canvas:
-  paper.setup(canvas);
+  var otherCanvas = document.createElement('canvas');
+  otherCanvas.setAttribute('style', 'position: absolute');
+  canvas.parentNode.insertBefore(otherCanvas, canvas);
+  paper.setup(otherCanvas);
   paper.view.autoUpdate = false;
   // paper.view.re
 

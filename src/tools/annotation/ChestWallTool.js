@@ -47,6 +47,8 @@ export default class ChestWallTool extends BaseAnnotationTool {
     // addNewMeasurement es quien llama a createNewMeasurment
     this.addNewMeasurement = addNewMeasurement.bind(this);
 
+    this.preventNewMeasurments = false;
+
     this.createNewMeasurement = createNewMeasurement.bind(this);
     this.pointNearTool = pointNearTool.bind(this);
     this.renderToolData = renderToolData.bind(this);

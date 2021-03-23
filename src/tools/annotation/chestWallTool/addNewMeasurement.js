@@ -27,6 +27,10 @@ export default function(evt, interactionType) {
   const eventData = evt.detail;
   const { element, image, buttons } = eventData;
 
+  if (this.preventNewMeasurement) {
+    return;
+  }
+
   evt.preventDefault();
   evt.stopPropagation();
 
@@ -36,14 +40,14 @@ export default function(evt, interactionType) {
   // moved from createNewMeasure
   // This avoids to create multiple tool handlers at the same time
   if (toolState && toolState.data && toolState.data.length) {
-    console.log('ChestWallTool:toolState:', toolState);
+    // console.log('ChestWallTool:toolState:', toolState);
     return;
   }
 
   // aca cambia porque le mandamos el evt completo
   const measurementData = this.createNewMeasurement(evt);
 
-  console.log('ChestWallTool:measurementData:', measurementData);
+  // console.log('ChestWallTool:measurementData:', measurementData);
 
   if (!measurementData) {
     return;
@@ -52,44 +56,4 @@ export default function(evt, interactionType) {
   // Associate this data with this imageId so we can render it and manipulate it
   addToolState(element, this.name, measurementData);
   external.cornerstone.updateImage(element);
-
-  // todo esto no tiene sentido...
-  /*
-  moveHandle(
-    eventData,
-    this.name,
-    measurementData,
-    measurementData.handles.center,
-    {}, // this.options,
-    interactionType, // 'mouse',
-    success => {
-      // ver esto...
-      // if (!success) {
-      //   removeToolState(element, this.name, measurementData);
-      //   return;
-      // }
-
-      if (measurementData.cancelled) {
-        return;
-      }
-
-      if (success) {
-        const eventType = EVENTS.MEASUREMENT_COMPLETED;
-        const eventData = {
-          toolName: this.name,
-          toolType: this.name, // Deprecation notice: toolType will be replaced by toolName
-          element,
-          measurementData,
-        };
-        measurementData.active = false;
-        external.cornerstone.updateImage(element);
-        // triggerEvent(element, eventType, eventData);
-        triggerEvent(element, EVENTS.MEASUREMENT_MODIFIED, eventData);
-        triggerEvent(element, EVENTS.MEASUREMENT_COMPLETED, eventData);
-      } else {
-        removeToolState(element, this.name, measurementData);
-      }
-    }
-  );
-  */
 }

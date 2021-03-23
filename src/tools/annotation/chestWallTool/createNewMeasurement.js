@@ -16,9 +16,16 @@ const bottomHandleY = handleDistance * 0.4;
 const getHandle = (x, y, name, extraAttributes = {}) => {
   index++;
 
+  let path = new paper.Path.Circle({
+    center: new paper.Point(x, y),
+    radius: 10,
+    fillColor: 'red',
+  });
+
   return Object.assign(
     {
       name,
+      path,
       x,
       y,
       index,
@@ -45,17 +52,18 @@ export default function(evt) {
     );
     return;
   }
-  const canvas = evt.detail.element.querySelector('canvas.cornerstone-canvas');
 
-  // Get a reference to the canvas object
-  // var canvas = document.getElementById('myCanvas');
-  // Create an empty project and a view for the canvas:
+  // paperjs canvas
+  // esto tiene que ir aca porque es donde primero aparece el evento de la tool
+  // https://developer.mozilla.org/en-US/docs/Web/API/Node/insertBefore
+  const canvas = evt.detail.element.querySelector('canvas.cornerstone-canvas');
   var otherCanvas = document.createElement('canvas');
   otherCanvas.setAttribute('style', 'position: absolute');
   canvas.parentNode.insertBefore(otherCanvas, canvas);
   paper.setup(otherCanvas);
   paper.view.autoUpdate = false;
-  // paper.view.re
+
+  // ----------------------------------------------------------------------
 
   const { x, y } = eventData.currentPoints.image;
 

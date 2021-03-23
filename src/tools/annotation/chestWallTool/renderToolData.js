@@ -71,75 +71,90 @@ export default function(evt) {
         handles.topRight,
         handles.bottomRight,
         handles.right,
+        handles.origin,
       ];
 
       paper.view.viewSize = new paper.Size(width, height);
-      // paper.view.context.fillStyle = '#00000000';
 
-      console.log(paper.view);
-      // Create a new layer and activate it:
-
-      var secondLayer = new paper.Layer();
-
-      console.log(secondLayer.hasFill());
-      // paper.view.element
-      //   .getContext('2d')
-      //   .clearRect(0, 0, paper.view.element.width, paper.view.element.height);
-
-      var path = new paper.Path.Circle({
-        center: [80, 50],
-        radius: 35,
-        fillColor: 'red',
+      handlesToDraw.forEach(element => {
+        element.path.position.x = element.x;
+        element.path.position.y = element.y;
       });
+      // if (!this.path) {
+      //   this.path = new paper.Path({
+      //     segments: [
+      //       px2point(element, handles.left),
+      //       px2point(element, handles.top),
+      //       px2point(element, handles.right),
+      //     ],
+      //     center: [handles.origin.x, 0],
+      //     strokeColor: 'red',
+      //     strokeWidth: 2,
+      //     fillColor: null,
+      //   });
 
-      // var secondPath = new paper.Path.Circle({
-      //   center: [120, 50],
-      //   radius: 35,
-      //   fillColor: '#00FF00',
-      // });
+      //   new paper.Path.Circle({
+      //     center: px2point(element, handles.top),
+      //     radius: 10,
+      //     fillColor: 'red',
+      //   });
 
+      //   new paper.Path.Circle({
+      //     center: px2point(element, handles.origin),
+      //     radius: 10,
+      //     fillColor: 'red',
+      //   });
+      // }
+
+      console.log(this.path);
+
+      // let oxy = external.cornerstone.pixelToCanvas(element, handles.origin);
+      // this.path.position = new paper.Point(oxy.x, oxy.y);
       paper.view.update();
 
-      // secondLayer.visible = false;
       if (this.configuration.drawHandles) {
         drawHandles(context, eventData, handlesToDraw, handleOptions);
       }
 
-      drawHandles(context, eventData, handles.origin, handleOptions);
-      // drawHandles(contextSVG, eventData, handles.origin, handleOptions);
+      // drawHandles(context, eventData, handles.origin, handleOptions);
 
-      // Draw Main Line
-      lineOptions = {
-        color: 'yellow',
-        lineWidth: 2,
-      };
+      // // Draw Main Line
+      // lineOptions = {
+      //   color: 'yellow',
+      //   lineWidth: 2,
+      // };
 
-      drawLine(ctx, element, handles.left, handles.origin, lineOptions);
-      // drawLine(contextSVG, element, handles.left, handles.origin, lineOptions);
-      drawLine(ctx, element, handles.right, handles.origin, lineOptions);
-      // drawLine(contextSVG, element, handles.right, handles.origin, lineOptions);
-      drawLine(ctx, element, handles.origin, handles.top, lineOptions);
-      // drawLine(contextSVG, element, handles.origin, handles.top, lineOptions);
+      // drawLine(ctx, element, handles.left, handles.origin, lineOptions);
+      // // drawLine(contextSVG, element, handles.left, handles.origin, lineOptions);
+      // drawLine(ctx, element, handles.right, handles.origin, lineOptions);
+      // // drawLine(contextSVG, element, handles.right, handles.origin, lineOptions);
+      // drawLine(ctx, element, handles.origin, handles.top, lineOptions);
+      // // drawLine(contextSVG, element, handles.origin, handles.top, lineOptions);
 
-      // Draw Bezier Curve
+      // // Draw Bezier Curve
 
-      let lineOptions = {
-        color: 'red',
-        lineWidth: 1,
-      };
+      // let lineOptions = {
+      //   color: 'red',
+      //   lineWidth: 1,
+      // };
 
-      erkomCurve(ctx, element, handlesToDraw, handles.origin, lineOptions);
+      // erkomCurve(ctx, element, handlesToDraw, handles.origin, lineOptions);
 
-      // erkomCurve(
-      //   contextSVG,
-      //   element,
-      //   handlesToDraw,
-      //   handles.origin,
-      //   lineOptions,
-      //   ''
-      // );
+      // // erkomCurve(
+      // //   contextSVG,
+      // //   element,
+      // //   handlesToDraw,
+      // //   handles.origin,
+      // //   lineOptions,
+      // //   ''
+      // // );
 
-      window.chestWallToolSVG = contextSVG.getSerializedSvg(true);
+      // window.chestWallToolSVG = contextSVG.getSerializedSvg(true);
     }
   });
+
+  function px2point(element, handle) {
+    let p = external.cornerstone.pixelToCanvas(element, handle);
+    return new paper.Point(p.x, p.y);
+  }
 }

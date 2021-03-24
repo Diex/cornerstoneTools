@@ -76,37 +76,11 @@ export default function(evt) {
 
       paper.view.viewSize = new paper.Size(width, height);
 
-      handlesToDraw.forEach(element => {
-        element.path.position.x = px2point(canvas, element.x);
-        element.path.position.y = px2point(canvas, element.y);
+      handlesToDraw.forEach(el => {
+        el.path.position.x = px2point(element, el).x;
+        el.path.position.y = px2point(element, el).y;
+        console.log(el.path);
       });
-      // if (!this.path) {
-      //   this.path = new paper.Path({
-      //     segments: [
-      //       px2point(element, handles.left),
-      //       px2point(element, handles.top),
-      //       px2point(element, handles.right),
-      //     ],
-      //     center: [handles.origin.x, 0],
-      //     strokeColor: 'red',
-      //     strokeWidth: 2,
-      //     fillColor: null,
-      //   });
-
-      //   new paper.Path.Circle({
-      //     center: px2point(element, handles.top),
-      //     radius: 10,
-      //     fillColor: 'red',
-      //   });
-
-      //   new paper.Path.Circle({
-      //     center: px2point(element, handles.origin),
-      //     radius: 10,
-      //     fillColor: 'red',
-      //   });
-      // }
-
-      console.log(this.path);
 
       // let oxy = external.cornerstone.pixelToCanvas(element, handles.origin);
       // this.path.position = new paper.Point(oxy.x, oxy.y);

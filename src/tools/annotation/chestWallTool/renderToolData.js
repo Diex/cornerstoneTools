@@ -77,8 +77,8 @@ export default function(evt) {
       paper.view.viewSize = new paper.Size(width, height);
 
       handlesToDraw.forEach(element => {
-        element.path.position.x = element.x;
-        element.path.position.y = element.y;
+        element.path.position.x = px2point(canvas, element.x);
+        element.path.position.y = px2point(canvas, element.y);
       });
       // if (!this.path) {
       //   this.path = new paper.Path({

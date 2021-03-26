@@ -4,16 +4,12 @@
 import { paper } from 'paper';
 import external from './../../../externalModules.js';
 import { getToolState } from './../../../stateManagement/toolState.js';
-import {
-  getNewContext,
-  draw,
-  drawLine,
-  erkomCurve,
-} from './../../../drawing/index.js';
+import { getNewContext, draw } from './../../../drawing/index.js';
 import drawHandles from './../../../drawing/drawHandles.js';
+import getPixelSpacing from './../../../util/getPixelSpacing';
 
-// Won't work using es6 import...
-const Canvas2Svg = require('./canvas2svg');
+// // Won't work using es6 import...
+// const Canvas2Svg = require('./canvas2svg');
 
 export default function(evt) {
   const eventData = evt.detail;
@@ -27,8 +23,10 @@ export default function(evt) {
   const width = canvas.width;
   const height = canvas.height;
 
+  const { rowPixelSpacing, colPixelSpacing } = getPixelSpacing(image);
+
   // SVG Context
-  const contextSVG = new window.C2S(width, height);
+  // const contextSVG = new window.C2S(width, height);
 
   // Check if there's any measurement data to render to continue
   if (!toolData || !toolData.data) {
@@ -38,18 +36,19 @@ export default function(evt) {
   const { data } = toolData;
 
   // Calculate the data measurements
+  // haga hago los calculos que fueran necesarios para actualizar la tool...
   if (data.invalidated === true) {
-    if (data.longestDiameter && data.shortestDiameter) {
-      this.throttledUpdateCachedStats(image, element, data);
-    } else {
-      this.updateCachedStats(image, element, data);
-    }
+    // if (data.longestDiameter && data.shortestDiameter) {
+    //   this.throttledUpdateCachedStats(image, element, data);
+    // } else {
+    //   this.updateCachedStats(image, element, data);
+    // }
   }
 
   draw(context, ctx => {
     for (let i = 0; i < toolData.data.length; i++) {
       const data = toolData.data[i];
-      const { handles } = data;
+      const { handles, path } = data;
 
       if (data.visible === false) {
         continue;
@@ -71,59 +70,28 @@ export default function(evt) {
         handles.topRight,
         handles.bottomRight,
         handles.right,
-        handles.origin,
+        // handles.origin,
       ];
 
       paper.view.viewSize = new paper.Size(width, height);
 
       handlesToDraw.forEach(el => {
-        el.path.position.x = px2point(element, el).x;
-        el.path.position.y = px2point(element, el).y;
-        console.log(el.path);
+        path.segments[handlesToDraw.indexOf(el)].point = px2point(element, el);
       });
 
-      // let oxy = external.cornerstone.pixelToCanvas(element, handles.origin);
-      // this.path.position = new paper.Point(oxy.x, oxy.y);
+      path.smooth();
       paper.view.update();
 
       if (this.configuration.drawHandles) {
         drawHandles(context, eventData, handlesToDraw, handleOptions);
       }
 
-      // drawHandles(context, eventData, handles.origin, handleOptions);
-
-      // // Draw Main Line
-      // lineOptions = {
-      //   color: 'yellow',
-      //   lineWidth: 2,
-      // };
-
-      // drawLine(ctx, element, handles.left, handles.origin, lineOptions);
-      // // drawLine(contextSVG, element, handles.left, handles.origin, lineOptions);
-      // drawLine(ctx, element, handles.right, handles.origin, lineOptions);
-      // // drawLine(contextSVG, element, handles.right, handles.origin, lineOptions);
-      // drawLine(ctx, element, handles.origin, handles.top, lineOptions);
-      // // drawLine(contextSVG, element, handles.origin, handles.top, lineOptions);
-
-      // // Draw Bezier Curve
-
-      // let lineOptions = {
-      //   color: 'red',
-      //   lineWidth: 1,
-      // };
-
-      // erkomCurve(ctx, element, handlesToDraw, handles.origin, lineOptions);
-
-      // // erkomCurve(
-      // //   contextSVG,
-      // //   element,
-      // //   handlesToDraw,
-      // //   handles.origin,
-      // //   lineOptions,
-      // //   ''
-      // // );
-
-      // window.chestWallToolSVG = contextSVG.getSerializedSvg(true);
+      // let duplicated = Object.assign({}, paper.project);
+      // console.log(duplicated);
+      // let scale = getPixelSpacing(image);
+      // duplicated._activeLayer.scale(scale.rowPixelSpacing);
+      paper.project.activeLayer.scale(1.0 / rowPixelSpacing);
+      window.chestWallToolSVG = paper.project.exportSVG({ bounds: 'content' }); //contextSVG.getSerializedSvg(true);
     }
   });
 

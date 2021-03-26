@@ -16,7 +16,10 @@ import handleSelectedTouchCallback from './chestWallTool/handleSelectedTouchCall
 // const logger = getLogger('tools:annotation:ChestWallTool');
 const emptyLocationCallback = (measurementData, eventData, doneCallback) =>
   doneCallback();
-
+const exportPDF = (measurementData, eventData, doneCallback) => {
+  console.log(measurementData, eventData, doneCallback);
+  console.log('bang !!!');
+};
 /**
  * @public
  * @class ChestWallTool
@@ -26,6 +29,8 @@ const emptyLocationCallback = (measurementData, eventData, doneCallback) =>
  */
 
 export default class ChestWallTool extends BaseAnnotationTool {
+  // exportPDF;
+
   constructor(props = {}) {
     const defaultProps = {
       name: 'ChestWall',
@@ -33,9 +38,10 @@ export default class ChestWallTool extends BaseAnnotationTool {
       configuration: {
         changeMeasurementLocationCallback: emptyLocationCallback,
         getMeasurementLocationCallback: emptyLocationCallback,
+        exportPDF: exportPDF,
         drawHandles: true,
         drawHandlesOnHover: false,
-        hideHandlesIfMoving: true,
+        hideHandlesIfMoving: false,
         renderDashed: false,
       },
       svgCursor: lengthCursor,

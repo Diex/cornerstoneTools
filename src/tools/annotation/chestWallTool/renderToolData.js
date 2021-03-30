@@ -25,9 +25,6 @@ export default function(evt) {
 
   const { rowPixelSpacing, colPixelSpacing } = getPixelSpacing(image);
 
-  // SVG Context
-  // const contextSVG = new window.C2S(width, height);
-
   // Check if there's any measurement data to render to continue
   if (!toolData || !toolData.data) {
     return;
@@ -48,7 +45,7 @@ export default function(evt) {
   draw(context, ctx => {
     for (let i = 0; i < toolData.data.length; i++) {
       const data = toolData.data[i];
-      const { handles, path } = data;
+      const { handles, curve } = data;
 
       if (data.visible === false) {
         continue;
@@ -74,22 +71,32 @@ export default function(evt) {
       ];
 
       paper.view.viewSize = new paper.Size(width, height);
+      // console.log('curve: ', curve);
 
       handlesToDraw.forEach(el => {
-        path.segments[handlesToDraw.indexOf(el)].point = px2point(element, el);
-      });
+        // path.segments[handlesToDraw.indexOf(el)].point = px2point(element, el);
+        let index = handlesToDraw.indexOf(el);
+        let inner = curve.children[0];
+        let outer = curve.children[1];
+        inner.segments[index].point = px2point(element, el);
 
-      path.smooth();
-      paper.view.update();
+        let offset = inner.getOffsetOf(inner.segments[index].point);
+        let normal = inner.getNormalAt(offset);
+        let pos = inner.segments[index].point.add(normal.multiply(20));
+        outer.segments[index].point = pos;
+      });
 
       if (this.configuration.drawHandles) {
         drawHandles(context, eventData, handlesToDraw, handleOptions);
       }
 
-      // let duplicated = Object.assign({}, paper.project);
-      // console.log(duplicated);
-      // let scale = getPixelSpacing(image);
-      // duplicated._activeLayer.scale(scale.rowPixelSpacing);
+      // console.log(curve.children);
+      curve.children.forEach(path => {
+        path.smooth();
+        // console.log(path);
+      });
+
+      paper.view.update();
       paper.project.activeLayer.scale(1.0 / rowPixelSpacing);
       window.chestWallToolSVG = paper.project.exportSVG({ bounds: 'content' }); //contextSVG.getSerializedSvg(true);
     }

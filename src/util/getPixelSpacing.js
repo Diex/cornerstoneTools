@@ -7,7 +7,7 @@ export default function getPixelSpacing(image) {
   );
 
   if (imagePlane) {
-    console.log(imagePlane);
+    // console.log(imagePlane);
     return {
       rowPixelSpacing:
         imagePlane.rowPixelSpacing || imagePlane.rowImagePixelSpacing,

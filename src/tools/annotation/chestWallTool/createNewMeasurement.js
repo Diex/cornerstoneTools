@@ -35,15 +35,36 @@ const getHandle = (x, y, name, extraAttributes = {}) => {
 
 const getPath = handles => {
   console.log(handles);
-  let path = new paper.Path();
-  path.strokeColor = 'red';
+  let inner = new paper.Path();
+  let outer = new paper.Path();
+  inner.strokeColor = 'red';
+  outer.strokeColor = 'blue';
+
+  let curve = new paper.Group([inner, outer]);
 
   Object.values(handles).forEach(el => {
     if (el.name == 'origin') return;
-    path.add(el.point);
+    inner.add(el.point);
   });
 
-  return path;
+  inner.segments.forEach(segment => {
+    // calculet offset for point
+    let offset = inner.getOffsetOf(segment.point);
+    // console.log('offset:', offset);
+    // calculate normal
+    let normal = inner.getNormalAt(offset);
+    // console.log('normal:', normal);
+    // displace
+    let pos = segment.point.add(normal.multiply(2));
+    // console.log('pos:', pos);
+    // add to second path
+    outer.add(pos);
+    // path.add(el.point);
+  });
+
+  // });
+
+  return curve;
 };
 
 // const getSetgment = (one, two) => {
@@ -98,6 +119,6 @@ export default function(evt) {
     color: undefined,
     invalidated: true,
     handles,
-    path: getPath(handles),
+    curve: getPath(handles),
   };
 }

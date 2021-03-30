@@ -37,10 +37,15 @@ const getPath = handles => {
   console.log(handles);
   let inner = new paper.Path();
   let outer = new paper.Path();
-  inner.strokeColor = 'red';
-  outer.strokeColor = 'blue';
 
-  let curve = new paper.Group([inner, outer]);
+  let ja = new paper.Path();
+  let jb = new paper.Path();
+
+  inner.strokeColor = 'red';
+  outer.strokeColor = 'red';
+  ja.strokeColor = 'red';
+  jb.strokeColor = 'red';
+  let curve = new paper.Group([inner, outer, ja, jb]);
 
   Object.values(handles).forEach(el => {
     if (el.name == 'origin') return;
@@ -62,8 +67,11 @@ const getPath = handles => {
     // path.add(el.point);
   });
 
-  // });
-
+  ja.add(inner.segments[0], outer.segments[0]);
+  jb.add(
+    inner.segments[inner.segments.lenght - 1],
+    outer.segments[outer.segments.lenght - 1]
+  );
   return curve;
 };
 

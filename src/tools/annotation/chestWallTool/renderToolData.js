@@ -73,11 +73,13 @@ export default function(evt) {
       paper.view.viewSize = new paper.Size(width, height);
       // console.log('curve: ', curve);
 
+      let inner = curve.children[0];
+      let outer = curve.children[1];
+
       handlesToDraw.forEach(el => {
         // path.segments[handlesToDraw.indexOf(el)].point = px2point(element, el);
         let index = handlesToDraw.indexOf(el);
-        let inner = curve.children[0];
-        let outer = curve.children[1];
+
         inner.segments[index].point = px2point(element, el);
 
         let offset = inner.getOffsetOf(inner.segments[index].point);
@@ -85,6 +87,16 @@ export default function(evt) {
         let pos = inner.segments[index].point.add(normal.multiply(20));
         outer.segments[index].point = pos;
       });
+
+      let ja = curve.children[2];
+      let jb = curve.children[3];
+
+      ja.segments[0].point = inner.segments[0].point;
+      ja.segments[1].point = outer.segments[0].point;
+      // console.log(inner.segments);
+      // console.log(inner.segments.length);
+      jb.segments[0].point = inner.segments[inner.segments.length - 1].point;
+      jb.segments[1].point = outer.segments[outer.segments.length - 1].point;
 
       if (this.configuration.drawHandles) {
         drawHandles(context, eventData, handlesToDraw, handleOptions);

@@ -12,8 +12,10 @@ import getPixelSpacing from './../../../util/getPixelSpacing';
 // const Canvas2Svg = require('./canvas2svg');
 
 export default function(evt) {
+  console.log(evt);
   const eventData = evt.detail;
   const { element, image } = eventData;
+  const viewportScale = evt.detail.viewport.scale;
 
   const toolData = getToolState(evt.currentTarget, this.name);
 
@@ -84,7 +86,9 @@ export default function(evt) {
 
         let offset = inner.getOffsetOf(inner.segments[index].point);
         let normal = inner.getNormalAt(offset);
-        let pos = inner.segments[index].point.add(normal.multiply(20));
+        let pos = inner.segments[index].point.add(
+          normal.multiply(20 * viewportScale)
+        );
         outer.segments[index].point = pos;
       });
 
@@ -93,8 +97,6 @@ export default function(evt) {
 
       ja.segments[0].point = inner.segments[0].point;
       ja.segments[1].point = outer.segments[0].point;
-      // console.log(inner.segments);
-      // console.log(inner.segments.length);
       jb.segments[0].point = inner.segments[inner.segments.length - 1].point;
       jb.segments[1].point = outer.segments[outer.segments.length - 1].point;
 
@@ -109,7 +111,10 @@ export default function(evt) {
       });
 
       paper.view.update();
-      paper.project.activeLayer.scale(1.0 / rowPixelSpacing);
+      console.log(rowPixelSpacing, colPixelSpacing, viewportScale);
+      paper.project.activeLayer.scale(
+        ((72.0 / 25.4) * rowPixelSpacing) / viewportScale
+      );
       window.chestWallToolSVG = paper.project.exportSVG({ bounds: 'content' }); //contextSVG.getSerializedSvg(true);
     }
   });
